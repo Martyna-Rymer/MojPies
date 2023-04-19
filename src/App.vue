@@ -37,7 +37,7 @@ export default {
           <router-link to="/map" class="nav-link" active-class="active-link" @click="hideMenu">Mapa</router-link>
         </li>
         <li class="nav-item active">
-          <router-link to="/sos" class="nav-link" active-class="active-link" @click="hideMenu">SOS</router-link>
+          <router-link to="/forum" class="nav-link" active-class="active-link" @click="hideMenu">Forum</router-link>
         </li>
        </ul>
       </div>

@@ -1,20 +1,20 @@
 {
-    "name": "PWA",
-    "short_name": "PWA",
-    "description": "Progressive Web App",
-    "scope": "https://github.com/Martyna-Rymer/PWA/",
-    "start_url": "/PWA/index.html",
+    "name": "MojPies",
+    "short_name": "MojPies",
+    "description": "Aplikacja spolecznosciowa dla wlascicieli psow",
+    "scope": "https://github.com/Martyna-Rymer/MojPies/",
+    "start_url": "/MojPies/index.html",
     "background_color": "#ffffff",
     "theme_color": "#83A6FF",
     "display": "standalone",
     "icons": [
       {
-        "src": "/assets/512x512.png",
+        "src": "/src/assets/512x512.png",
         "sizes": "512x512",
         "type": "image/png"
       },
       {
-        "src": "/assets/192x192.png",
+        "src": "/src/assets/192x192.png",
         "sizes": "192x192",
         "type": "image/png"
       }

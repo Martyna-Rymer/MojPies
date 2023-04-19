@@ -14,10 +14,20 @@ const router = createRouter({
       component: () => import('../views/MapView.vue')
     },
     {
-      path: '/sos',
-      name: 'sos',
-      component: () => import('../views/SOSView.vue')
+      path: '/forum',
+      name: 'forum',
+      component: () => import('../views/ForumMainView.vue')
     },
+    {
+      path: '/section/:key',
+      name: 'forumSection',
+      component: () => import('../views/ForumSectionView.vue')
+    },
+    {
+      path: '/section/:sectionKey/topic/:threadId',
+      name: 'forumThread',
+      component: () => import('../views/ForumSingleTopicView.vue')
+    }
   ]
 })
 

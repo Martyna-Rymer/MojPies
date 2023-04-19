@@ -7,8 +7,8 @@ self.addEventListener("fetch", fetchEvent => {
   })
 
 
-  var GHPATH = '/PWA';
-  var APP_PREFIX = 'pwa_';
+  var GHPATH = '/MojPies';
+  var APP_PREFIX = 'mojpies_';
   var VERSION = 'version_00';
   var URLS = [    
     `${GHPATH}/`,
