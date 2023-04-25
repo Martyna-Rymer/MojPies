@@ -8,7 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "firebase": "^9.19.1",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-brands-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
+    "bottom-navigation-vue": "^3.3.2",
+    "firebase": "^9.20.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

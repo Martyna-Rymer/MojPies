@@ -1,10 +1,10 @@
 <template>
     <div class="forum">
-        <h2>Psie forum</h2>
         <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
         <div class="forum-sections">
             <div v-for="section in forumSections" :key="section.id">
-                <router-link :to="'/section/' + section.key">
+                <!-- <router-link :to="'/section/' + key"> -->
+                    <router-link :to="{ name: 'section', params: { key: section.id } }">
                 <h3>{{ section.name }} (Tematów: {{ section.threadCount }})</h3>
                 </router-link>
             </div>
@@ -15,7 +15,7 @@
 <script setup>
 
 import { ref, onMounted, computed } from 'vue';
-import { collection, onSnapshot, getDocs, query, where } from 'firebase/firestore'
+import { collection, doc, onSnapshot, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/firebase';
 
 const forumSections = ref([])

@@ -1,74 +1,79 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 export default {
-    methods: {
-      hideMenu() {
-        const navbar = document.querySelector('.navbar-collapse')
-        navbar.classList.remove('show')
-      }
-    },
-    mounted() {
-      this.$router.afterEach((to, from) => {
-        this.hideMenu()
-      })
+  data() {
+    return {
+      pageTitle: 'Profil',
+    };
+  },
+  watch: {
+    '$route'(to, from) {
+      this.pageTitle = to.meta.pageTitle;
     }
   }
+};
 </script>
 
 <template>
-    <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <router-link to="/" class="nav-link" active-class="active-link" @click="hideMenu">Dane autorów</router-link>
-        </li>
-        <li class="nav-item active">
-          <router-link to="/map" class="nav-link" active-class="active-link" @click="hideMenu">Mapa</router-link>
-        </li>
-        <li class="nav-item active">
-          <router-link to="/forum" class="nav-link" active-class="active-link" @click="hideMenu">Forum</router-link>
-        </li>
-       </ul>
-      </div>
-    </nav>
-    
-    <div class="container">
-      <RouterView />
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container-fluid d-flex justify-content-between">
+          <a @click="$router.back()">
+          <font-awesome-icon :icon="['fas', 'arrow-left']" /></a>
+        <span class="navbar-text">
+          {{ pageTitle }}
+        </span>
     </div>
-
+  </nav>
+  <div class="container">
+    <RouterView />
+  </div>
+  <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+    <div class="justify-content-center" id="navbarNav">
+        <router-link to="/" class="nav-link" active-class="active-link">
+          <img class="mobile-only" src="/src/assets/profile.png" width="50" height="50">
+          <span class="desktop-only">Profil</span>
+        </router-link>
+        <router-link to="/forum" class="nav-link" active-class="active-link">
+          <img class="mobile-only" src="/src/assets/forum.png" width="50" height="50">
+          <span class="desktop-only">Forum</span>
+        </router-link>
+        <router-link to="/events" class="nav-link" active-class="active-link">
+          <img class="mobile-only" src="/src/assets/calendar.png" width="50" height="50">
+          <span class="desktop-only">Wydarzenia</span>
+        </router-link>
+    </div>
+  </nav>
 </template>
 
-
-
 <style scoped>
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-}
+  .mobile-only {
+    display: block;
+  }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
+  .desktop-only {
+    display: none;
+  }
 
-nav a:first-of-type {
-  border: 0;
-}
+  nav {
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
-.container {
+  nav a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  nav a:first-of-type {
+    border: 0;
+  }
+
+  .container {
     max-width: 1280px;
     margin-top: 45px;
     display: flex;
@@ -76,11 +81,28 @@ nav a:first-of-type {
     align-items: center;
   }
 
-@media (min-width: 1024px) {
-  nav {
-    text-align: left;
-    font-size: 1rem;
-    padding: 1rem 0;
+  .navbar-text,
+  .desktop-only {
+    font-size: 18px;
   }
+
+  .navbar {
+  display: flex;
+  align-items: center;
 }
+
+.navbar-text {
+  flex-grow: 1; 
+  text-align: center;
+}
+
+  @media (min-width: 576px) {
+    .mobile-only {
+      display: none;
+    }
+
+    .desktop-only {
+      display: inline-block;
+    }
+  }
 </style>
