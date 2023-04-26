@@ -1,39 +1,67 @@
 <template>
-    <div>
-      <h1>{{ section.name }}</h1>
-      <ul>
-        <li v-for="(thread, index) in section.threads" :key="index">
-          <router-link :to="'/section/' + section.key + '/thread/' + thread.id">{{ thread.title }}</router-link>
-        </li>
-      </ul>
+    <div v-if="currentSection">
+      <h1>{{ currentSection.sectionName }}</h1>
+      <ul v-if="threads">
+      <li v-for="(thread, index) in threads" :key="index">
+        <router-link :to="'/section/' + currentSection.id + '/thread/' + thread.id">{{ thread.topic }}</router-link>
+      </li>
+    </ul>
     </div>
   </template>
   
   <script>
+
   import { db } from '@/firebase';
   import router from '@/router';
   import { useRouter, useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
-  import { collection, getDocs } from 'firebase/firestore';
+  import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
   
-
 
   export default {
   setup() {
-    const route = useRoute();
-    const section = ref({ key: '', name: '', threads: [] });
-    const sectionId = route.params.key;
+  const currentSection = ref()
+  const threads = ref([]);
 
-    onMounted(async () => {
-      const sectionRef = collection(db, 'forum').doc(sectionId);
-      const threadRef = collection(sectionRef, 'threads');
-      const threadsSnapshot = await getDocs(threadRef);
-      const threads = threadsSnapshot.docs.map((doc) => {
-        return { id: doc.id, title: doc.data().title };
+
+onMounted(async () => {
+    const route = useRoute()
+    const snap = await getDoc(doc(db, `forum/${route.params.key}`))
+    const docData = snap.data();
+    const section = { id: doc.id, sectionName: docData.sectionName};
+    currentSection.value = section;
+
+    const threadSnap = await getDocs(collection(db, `forum/${route.params.key}/threads`));
+      threads.value = threadSnap.docs.map((doc) => {
+        const data = doc.data();
+        console.log('Thread data:', data);
+        return { id: doc.id, ...data };
       });
+});
+return {
+      currentSection,
+      threads,
+    }
+}}
 
-      section.value = { key: sectionId, name: sectionRef.name, threads: threads };
-    });
+//   export default {
+//   setup() {
+//     const route = useRoute();
+//     const section = ref({ key: '', name: '', threads: [] });
+//     const sectionId = route.params.key;
+
+//     onMounted(async () => {
+//       const sectionRef = collection(db, 'forum').doc(sectionId);
+//       const threadRef = collection(sectionRef, 'threads');
+//       const threadsSnapshot = await getDocs(threadRef);
+//       const threads = threadsSnapshot.docs.map((doc) => {
+//         return { id: doc.id, title: doc.data().title };
+//       });
+
+//       section.value = { key: sectionId, name: sectionRef.name, threads: threads };
+//     });
+
+
 
 //     onMounted(async () => {
 //   const querySnapshot = await getDocs(collection(db, 'forum'));
@@ -48,11 +76,11 @@
 
 //   forumSections.value = fbForumSections;
 
-    return {
-      section,
-    };
-  },
-};
+    // return {
+    //   section,
+    // };
+//   },
+// };
 
 //   export default {
 //     router, 

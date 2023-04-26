@@ -14,3 +14,12 @@ export default defineConfig({
     }
   }
 })
+
+// module.exports = {
+//   configureWebpack: {
+//     output: {
+//       globalObject: 'this'
+//     }
+//   }
+// };
+

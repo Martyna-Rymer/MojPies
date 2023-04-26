@@ -65,7 +65,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/section/:sectionKey/topic/:threadId',
+      path: '/section/:sectionKey/thread/:threadId',
       name: 'forumThread',
       component: () => import('../views/ForumSingleTopicView.vue'),
       meta: {
