@@ -1,5 +1,12 @@
-<!-- <script>
+
+<!--
+<script>
+import { onUpdated } from 'vue';
+
   export default {
+
+
+
     mounted() {
       var mapOptions = {
           center: [50.0521, 19.9766],
@@ -8,27 +15,47 @@
       var map = new L.map('map', mapOptions);
       var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
       map.addLayer(layer);
-
-      navigator.eventGeolocation.getCurrentPosition(position => {
-          var lat = position.coords.latitude
-          var lng = position.coords.longitude
-          var marker = L.marker([lat, lng]);
+      // var marker = L.marker([50, 20]);
+      var marker = L.marker([50, 20], {
+    draggable: true
+  });
           marker.addTo(map);
-          map.setView([lat, lng], 15)
-      }, error => {
-          console.log('Error getting user location:', error)
-      })
-    }
+
+  //         this.marker.on('drag', () => {
+  //   const latlng = this.marker.getLatLng();
+  //   console.log(latlng.lat, latlng.lng);
+  // });
+
+          map.setView([50, 20], 15)
+  //         this.marker.on('drag', () => {
+  //   const latlng = this.marker.getLatLng();
+  //   console.log(latlng.lat, latlng.lng);
+  // });
+      // navigator.geolocation.getCurrentPosition(position => {
+      //     var lat = position.coords.latitude
+      //     var lng = position.coords.longitude
+      //     var marker = L.marker([lat, lng]);
+      //     console.log(`x ${lat} y ${lng}`)
+      //     marker.addTo(map);
+      //     map.setView([lat, lng], 15)
+      // }, error => {
+      //     console.log('Error getting user location:', error)
+      // })
+
+      map.on('moveend', console.log(map.getCenter()))
+    },
+    
   }  
+  
 </script>
 
 <template>
   <div class="map-wrapper">
     <div id="map"></div>
   </div>
-</template>-->
+</template>
 
-<!-- <style scoped>
+<style scoped>
   .map-wrapper {
     position: fixed;
     top: 0;
@@ -37,7 +64,14 @@
     height: 100%;
     z-index: 9999;
   }
+  .sortable-handler {
+  touch-action: none;
+}
 </style>
+
+
+
+
 <template>
   <div class="map-wrapper">
     <div id="map"></div>
@@ -87,11 +121,11 @@
       },
     },
   };
-</script> -->
+</script> 
 
 
 
-<!-- <template>
+<template>
   <div class="map-wrapper" ref="mapWrapper">
     <div id="map"></div>
   </div>
@@ -170,11 +204,11 @@ export default {
     height: 100%;
     z-index: 9999;
 }
-</style> -->
+</style> 
 
 
 
-<!-- <template>
+<template>
   <div class="map-wrapper">
     <div id="map"></div>
   </div>
@@ -245,7 +279,7 @@ export default {
   #map {
     height: 100%;
   }
-</style> -->
+</style> 
 
 <template>
   <div class="map-wrapper">
@@ -260,6 +294,7 @@ export default {
 
 
   mounted() {
+    this.$nextTick(() => {
     const map = L.map(this.$refs.map).setView([51.505, -0.09], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -279,7 +314,8 @@ export default {
     };
 
     map.on('click', setMarker);
-  },
+  })
+}}
 
 
   // mounted() {
@@ -311,7 +347,7 @@ export default {
   //     console.log('Error getting user location:', error)
   //   })
   // }
-}
+
 </script>
 
 <style scoped>
@@ -325,4 +361,257 @@ export default {
   #map {
     height: 100%;
   }
+</style>-->
+
+
+<!--
+<template>
+      <div class="map-wrapper">
+    <div id="map"></div>
+  </div>
+  <button class="confirm-position-button" @click="confirmPosition">Confirm Position</button>
+</template>
+
+<script>
+import { onMounted, ref } from 'vue';
+import L from 'leaflet';
+
+export default {
+  name: 'MapComponent',
+  setup() {
+    const markerPosition = ref([50.0521, 19.9766]); // initial marker position
+    let map = null;
+    let marker = null;
+
+    onMounted(() => {
+      // Create the map and set the view to the initial marker position
+      map = L.map('map').setView(markerPosition.value, 13);
+
+      // Add a tile layer to the map
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+        maxZoom: 18
+      }).addTo(map);
+
+      // Create a marker and add it to the map
+      marker = L.marker(markerPosition.value, {
+        draggable: true
+      }).addTo(map);
+      
+      // Add an event listener to the marker's dragend event
+      marker.on('dragend', (e) => {
+        // Update the markerPosition ref with the new marker position
+        markerPosition.value = [e.target.getLatLng().lat, e.target.getLatLng().lng];
+      }, { passive: false });
+      console.log(`marker ${marker.getLatLng()}`);
+    });
+
+    // Return the markerPosition ref and marker object from the setup function
+    console.log(`marker position ${markerPosition.value}`);
+    return {
+      markerPosition,
+      marker
+    }
+    
+  },
+  methods: {
+    confirmPosition() {
+    // if (this.marker) {
+      // const eventGeolocation = this.marker.getLatLng();
+      // console.log('Event geolocation:', eventGeolocation);
+      console.log('Event geolocation 22222:', markerPosition);
+      console.log('aaaa');
+    // }
+  }
+  },
+  watch: {
+    markerPosition(newValue) {
+      if (this.marker) {
+        // Update the marker's position on the map
+        this.marker.setLatLng(newValue);
+      }
+    }
+  }
+}
+</script>-->
+
+
+<!--
+<style scoped>
+  .map-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+  }
+  #map {
+    height: 100%;
+  }
+  .confirm-position-button {
+    position: fixed;
+    bottom: 5px;
+    z-index: 9999;
+  }
+</style>
+
+
+<template>
+  <div class="map-wrapper">
+<div id="map"></div>
+</div>
+<button class="confirm-position-button" @click="confirmPosition">Confirm Position</button>
+</template>
+
+<script>
+import { onMounted, reactive } from 'vue';
+import L from 'leaflet';
+
+export default {
+  name: 'Map',
+  setup() {
+    const state = reactive({
+      map: null,
+      marker: null,
+      markerCreated: false,
+    });
+
+    onMounted(() => {
+      const map = L.map('map').setView([50.0521, 19.9766], 13);
+      state.map = map;
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+      }).addTo(map);
+
+      const marker = L.marker([50.0521, 19.9766], {
+        draggable: true,
+      }).addTo(map);
+
+      state.marker = marker;
+      state.markerCreated = true;
+    });
+
+    const markerPosition = (newValue) => {
+      if (state.marker) {
+        state.marker.setLatLng(newValue);
+      }
+    };
+
+    const confirmPosition = () => {
+      if (state.markerCreated) {
+        const eventGeolocation = state.marker.getLatLng();
+        console.log('Event geolocation:', eventGeolocation);
+        this.closeMap()
+      }
+    };
+
+    return {
+      markerPosition,
+      confirmPosition,
+    };
+  },
+};
+</script>
+
+-->
+
+
+
+<template>
+  <div class="map-wrapper">
+<div id="map"></div>
+</div>
+<button class="map-button" @click="confirmPosition">Confirm Position</button>
+<button class="map-button" @click="cancel">Cancel</button>
+</template>
+
+<script>
+import { onMounted, reactive } from 'vue';
+import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router'
+import L from 'leaflet';
+
+export default {
+  name: 'Map',
+  props: {
+    eventGeolocation: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props,) {
+    const router = useRouter()
+    const state = reactive({
+      map: null,
+      marker: null,
+      markerCreated: false,
+    });
+
+    onMounted(() => {
+      const map = L.map('map').setView([50.0521, 19.9766], 13);
+      state.map = map;
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+      }).addTo(map);
+
+      const marker = L.marker([50.0521, 19.9766], {
+        draggable: true,
+      }).addTo(map);
+
+      state.marker = marker;
+      state.markerCreated = true;
+    });
+
+    const markerPosition = (newValue) => {
+      if (state.marker) {
+        state.marker.setLatLng(newValue);
+      }
+    };
+
+    const confirmPosition = () => {
+      if (state.markerCreated) {
+        const eventGeolocation = state.marker.getLatLng();
+        console.log('Event geolocation:', eventGeolocation);
+        props.eventGeolocation.lat = eventGeolocation.lat;
+        props.eventGeolocation.lng = eventGeolocation.lng;
+        console.log(props.eventGeolocation.lng)
+        // props.showMap = false;
+      }
+    };
+
+    const cancel = () => {
+      // props.showMap = false;
+    };
+
+    return {
+      markerPosition,
+      confirmPosition,
+      cancel,
+    };
+  },
+};
+</script>
+
+<style scoped>
+  .map-wrapper {
+    /* position: fixed;
+    bottom: 0;
+    left: 0; */
+    width: 100%;
+    height: 20%;
+    /* z-index: 9998; */
+  }
+  /* .map-button {
+    position: fixed;
+    bottom: 5px;
+    z-index: 9999;
+  } */
 </style>

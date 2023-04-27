@@ -57,7 +57,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/section/:key',
+      path: '/section/:sectionKey',
       name: 'section',
       component: () => import('../views/ForumSectionView.vue'),
       meta: {
@@ -71,7 +71,7 @@ const router = createRouter({
       meta: {
         pageTitle: "Psie forum",
       },
-    }
+    },
   ]
 })
 

@@ -4,7 +4,7 @@
         <div class="forum-sections">
             <div v-for="section in forumSections" :key="section.id">
                 <!-- <router-link :to="'/section/' + key"> -->
-                    <router-link :to="{ name: 'section', params: { key: section.id } }">
+                    <router-link :to="{ name: 'section', params: { sectionKey: section.id } }">
                 <h3>{{ section.name }} (Tematów: {{ section.threadCount }})</h3>
                 </router-link>
             </div>

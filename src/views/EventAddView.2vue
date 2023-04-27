@@ -14,15 +14,14 @@
     <input type="text" v-model="eventLocation" required>
     <p>Współrzędne</p>
     <input type="text" v-model="eventGeolocation">
-
+    <button @click="openMap">Select location on map</button>
+    <div v-if="showMap">
+    <MapView @location-selected="onLocationSelected" :event-geolocation="eventGeolocation"/>
+</div>
     <p>Data i godzina</p>
     <VueDatePicker format="dd/MM/yyyy H:mm" v-model="eventDate" :enable-time-picker="true" :clearable="false" text-input required></VueDatePicker>
     <p>Opis</p>
-    <div><textarea v-model="eventDescription"></textarea></div>
-    <button @click="openMap">Select location on map</button>
-    <!-- <div v-if="showMap"> -->
-    <MapView @location-selected="onLocationSelected" :event-geolocation="eventGeolocation"/>
-<!-- </div> -->
+    <textarea v-model="eventDescription"></textarea>
     <img src="/src/assets/add.png" width="70" height="70" v-on:click="addEvent" />
 </template>
   
