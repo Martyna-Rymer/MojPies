@@ -1,6 +1,8 @@
 <template>
   <div v-if="currentThread">
-    {{ currentThread.threadTopic }}
+    <div>{{ currentThread.threadTopic }}</div>
+    <div>{{ currentThread.threadDescription }}</div>
+
     <div>
       {{ currentThread.threadAuthor }}
       {{ formatDate(currentThread.threadStartDate) }}
@@ -63,7 +65,7 @@
             answer: answer.answer,
             authorName: authorName
           };
-        });
+        }).sort((a, b) => new Date(a.date) - new Date(b.date));
         const threadAuthorName = await getAuthorName(docData.authorRef);
         const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorName, threadStartDate: docData.date, answers: await Promise.all(answers) };
         currentThread.value = thread;

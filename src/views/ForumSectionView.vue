@@ -53,8 +53,9 @@
         const threadSnap = await getDocs(collection(db, `forum/${route.params.sectionKey}/threads`));
         threads.value = threadSnap.docs.map((doc) => {
           const data = doc.data();
-          return { id: doc.id, ...data };
-        });
+        //   console.log(data.date)
+          return { id: doc.id, date: data.date, ...data };
+        }).sort((a, b) => new Date(a.date) - new Date(b.date));
   
         for (const [index, thread] of threads.value.entries()) {
             try {

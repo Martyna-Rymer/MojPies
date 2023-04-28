@@ -1,31 +1,35 @@
-<script setup>
-import { ref, onMounted, computed } from 'vue';
-
-import { doc, onSnapshot, getDocs, getDoc, query, where } from 'firebase/firestore';
-
-// import { doc, onSnapshot, getDocs, query, where } from 'firebase/firestore'
-import { db, readDocument } from '@/firebase';
-import { collection } from 'firebase/firestore'
-  
-const eventsList = ref([])
-
-onMounted(async () => {
-const querySnapshot = await getDocs(collection(db, 'events'));
-
-const fbEventsList = [];
-for (const doc of querySnapshot.docs) {
-  const event = { id: doc.id, type: doc.data().type, location: doc.data().location, date: doc.data().date, attendees: doc.data().attendees};
-  fbEventsList.push(event);
-}
-
-eventsList.value = fbEventsList;
-});
-</script>
-
 <script>
-export default {
-  methods: {
-    formatDate(timestamp) {
+  import { ref, onMounted, computed } from 'vue';
+  import { doc, onSnapshot, getDocs, getDoc, query, where } from 'firebase/firestore';
+  import { db } from '@/firebase';
+  import { collection, updateDoc, arrayUnion, arrayRemove} from 'firebase/firestore'
+
+  export default {
+    setup() {
+      const eventsList = ref([])
+            //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //         const currentUserId = firebase.auth().currentUser.id;
+      const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
+      const userRef = doc(db, 'users', currentUserId);
+
+    onMounted(async () => {
+    const querySnapshot = await getDocs(collection(db, 'events'));
+
+    const fbEventsList = [];
+    for (const doc of querySnapshot.docs) {
+      const attendeeIds = doc.data().attendees.map(ref => ref.id);
+      const event = { id: doc.id, 
+        type: doc.data().type, 
+        location: doc.data().location, 
+        date: doc.data().date, 
+        attendees: doc.data().attendees, 
+        userAttends: attendeeIds.includes(userRef.id)};
+      fbEventsList.push(event);
+    }
+    eventsList.value = fbEventsList;
+    });
+
+    function formatDate(timestamp) {
       const date = new Date(timestamp.toMillis());
       const days = ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
       const months = ["stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"];
@@ -34,55 +38,51 @@ export default {
       const month = months[date.getMonth()];
       const year = date.getFullYear();
       return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
-    },
+    }
+
+    async function attendEvent (event) {
+      // //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //   //         const currentUserId = firebase.auth().currentUser.id;
+      // const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
+      // const userRef = doc(db, 'users', currentUserId);
+      const attendeeIds = event.attendees.map(ref => ref.id);
+      const attendeeIndex = attendeeIds.indexOf(userRef.id);
+      const eventRef = doc(db, 'events', event.id);
+      console.log('attendee index')
+      console.log(attendeeIndex)
+      if (attendeeIndex === -1) {
+        event.attendees.push(currentUserId);
+        await updateDoc(eventRef, {
+        attendees: arrayUnion(userRef)
+        }).then(() => {
+          console.log('User added to attendees array');
+        }).catch((error) => {
+          console.error(error);
+        });
+
+      }
+      else {
+        event.attendees.splice(attendeeIndex, 1);
+        console.log(event.attendees)
+        await updateDoc(eventRef, {
+        attendees: arrayRemove(userRef)
+        }).then(() => {
+          console.log('User removed from attendees array');
+        }).catch((error) => {
+          console.error(error);
+        });;
 
 
-    attendEvent (event) {
-      console.log(event.id);
-          const attendeeIndex = event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj');
-          if (attendeeIndex === -1) {
-            event.attendees.push('xo9FaiazKTo5ATkJa7Bj');
-            var audio = new Audio('/src/assets/bark.mp3')
-            audio.play()
-          }
+      }
+      var audio = new Audio('/src/assets/bark.mp3')
+        audio.play();
+        window.location.reload();
+    }
 
+    return {formatDate, attendEvent, eventsList}
+  }
+}
 
-
-
-  //         const user = firebase.auth().currentUser;
-  // if (user) {
-  //   const eventId = event.id;
-  //   const eventRef = db.collection('events').doc(eventId);
-
-  //   eventRef.update({
-  //     attendees: firebase.firestore.FieldValue.arrayUnion(user.uid)
-  //   }).then(() => {
-  //     console.log('User added to attendees array');
-  //   }).catch((error) => {
-  //     console.error(error);
-  //   });
-  // } else {
-  //   console.log('User not logged in');
-  // }
-    const currentUser = 'xo9FaiazKTo5ATkJa7Bj'; // replace with the current user's ID
-    const eventId = event.id;
-    const eventsCollection = collection(db, 'events');
-    console.log(db);
-    const docc = doc(db, 'events/gXKDPe3ZCFfAt2gnNxfK');
-    console.log(getDoc(docc));
-    const attendeesRef = db.collection('events').doc(eventId);
-    attendeesRef.update({
-      attendees: firebase.firestore.FieldValue.arrayUnion(currentUser)
-    })
-    .then(() => {
-      console.log("User added to attendees list");
-    })
-    .catch(error => {
-      console.error("Error adding user to attendees list:", error);
-    });
-        },
-      },
-    };
 </script>
 
 <template>
@@ -97,8 +97,9 @@ export default {
               <p class="event-subtitle">{{ formatDate(event.date) }}</p>
             </div>
             <div class="attendees">
-              <button :class="{ 'attended': event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj') !== -1, 'not-attended': event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj') === -1 }" @click.prevent="attendEvent(event)">
-                {{ event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj') !== -1 ? 'Dołączono' : 'Dołącz' }}
+              
+              <button :class="{ 'attended': event.userAttends, 'not-attended': !event.userAttends }" @click.prevent="attendEvent(event)">
+                {{ event.userAttends ? 'Rezygnuję' : 'Dołączam' }}
               </button>
             </div>
           </div>
@@ -132,12 +133,12 @@ export default {
 }
 
 .attended {
-  background-color: rgb(0, 128, 255);
+  background-color: rgb(184, 57, 57);
   color: white;
 }
 
 .not-attended {
-  background-color: green;
+  background-color: rgb(82, 158, 82);
   color: white;
 }
 
