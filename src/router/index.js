@@ -72,6 +72,14 @@ const router = createRouter({
         pageTitle: "Psie forum",
       },
     },
+    {
+      path: '/section/:sectionKey/thread/newThread',
+      name: 'forumNewThread',
+      component: () => import('../views/ForumNewThreadView.vue'),
+      meta: {
+        pageTitle: "Nowy wątek",
+      },
+    },
   ]
 })
 

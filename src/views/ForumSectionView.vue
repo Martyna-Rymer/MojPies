@@ -5,13 +5,18 @@
       <div class="forum-sections">
         <div v-if="threads">
             <div v-for="(thread, index) in threads" :key="index"  class="thread-item">
-                <!-- <router-link :to="'/section/' + currentSection.id + '/thread/' + thread.id">{{ thread.topic }}</router-link> -->
                 <router-link :to="{ name: 'forumThread', params: { sectionKey: currentSection.id,  threadId: thread.id} }">{{ thread.topic }}</router-link>
                 <p>{{ thread.userName }}, {{ formatDate(thread.date) }}</p>
             </div>
         </div>
       </div>
+      <div>
+        <router-link :to="{ name: 'forumNewThread', params: { sectionKey: currentSection.id} }">
+      <img class="bottom-button" src="/src/assets/add.png" height="100" width="100"> 
+    </router-link>
     </div>
+    </div>
+     
   </template>
 
 
