@@ -41,6 +41,7 @@ export default {
           <img class="mobile-only" src="/src/assets/calendar.png" width="50" height="50">
           <span class="desktop-only">Wydarzenia</span>
         </router-link>
+        
     </div>
   </nav>
 </template>
