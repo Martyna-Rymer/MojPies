@@ -80,6 +80,14 @@ const router = createRouter({
         pageTitle: "Nowy wątek",
       },
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
+      meta: {
+        pageTitle: "Zarejestruj się",
+    },
+  },
   ]
 })
 
