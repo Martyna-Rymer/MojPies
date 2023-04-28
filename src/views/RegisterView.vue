@@ -1,11 +1,12 @@
 <template>
-    <h1>Utwórz konto</h1>
+    <img src="/src/assets/banner.png" alt="Banner" class="banner-image">
+
+    <h1>Utwórz swoje konto</h1>
     <p><input type="text" placeholder="Email" v-model="email" /></p>
     <p><input type="password" placeholder="Hasło" v-model="password" /></p>
 
     <p><button @click="register">Zarejestruj się</button></p>
     <p><button @click="signInWithGoogle">Zarejestruj się przy pomocy swojego konta Google</button></p>
-    <!-- <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image"> -->
 </template>
 
 
@@ -45,6 +46,7 @@ const signInWithGoogle = () => {
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)
             // ...
+            router.push('/forum')
         }).catch((error) => {
             // Handle Errors here.
             const errorCode = error.code;
