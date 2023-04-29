@@ -4,13 +4,17 @@
     <div>{{ currentThread.threadDescription }}</div>
 
     <div>
-      {{ currentThread.threadAuthor }}
-      {{ formatDate(currentThread.threadStartDate) }}
+      <router-link :to="{ name: 'profile', params: { userId: currentThread.threadAuthor.id } }">
+        {{ currentThread.threadAuthor.name }}
+      </router-link>
+        {{ formatDate(currentThread.threadStartDate) }}
     </div>
     <div v-for="item in currentThread.answers">
       {{ item.answer }}
       <div>
-        {{ item.authorName }}
+        <router-link :to="{ name: 'profile', params: { userId: item.authorId } }">
+          {{ item.authorName }}
+        </router-link>
         {{ formatDate(item.date) }}
       </div>
     </div>
@@ -47,27 +51,27 @@
         return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`;
       };
       
-      const getAuthorName = async (authorRef) => {
+      const getAuthorData = async (authorRef) => {
         const authorDoc = await getDoc(authorRef);
-        return authorDoc.data().name;
+        return {name: authorDoc.data().name, id: authorDoc.id};
       }
 
       onMounted(async () => {
         const route = useRoute();
         path.value = `forum/${route.params.sectionKey}/threads/${route.params.threadId}`;
-        
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
         const answers = docData.answers.map(async (answer) => {
-          const authorName = await getAuthorName(answer.author);
+          const authorData = await getAuthorData(answer.author);
           return {
             date: answer.date,
             answer: answer.answer,
-            authorName: authorName
+            authorName: authorData.name,
+            authorId: authorData.id
           };
         }).sort((a, b) => new Date(a.date) - new Date(b.date));
-        const threadAuthorName = await getAuthorName(docData.authorRef);
-        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorName, threadStartDate: docData.date, answers: await Promise.all(answers) };
+        const threadAuthorData = await getAuthorData(docData.authorRef);
+        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadStartDate: docData.date, answers: await Promise.all(answers) };
         currentThread.value = thread;
       });
 

@@ -1,13 +1,12 @@
 <script>
-  import { ref, onMounted, computed } from 'vue';
-  import { doc, onSnapshot, getDocs, getDoc, query, where } from 'firebase/firestore';
+  import { ref, onMounted } from 'vue';
+  import { doc, getDocs, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
   import { db } from '@/firebase';
-  import { collection, updateDoc, arrayUnion, arrayRemove} from 'firebase/firestore'
 
   export default {
     setup() {
       const eventsList = ref([])
-            //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //         const currentUserId = firebase.auth().currentUser.id;
       const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
       const userRef = doc(db, 'users', currentUserId);
@@ -23,7 +22,7 @@
         location: doc.data().location, 
         date: doc.data().date, 
         attendees: doc.data().attendees, 
-        userAttends: attendeeIds.includes(userRef.id)};
+        userAttends: attendeeIds.includes(currentUserId)};
       fbEventsList.push(event);
     }
     eventsList.value = fbEventsList;
@@ -41,15 +40,9 @@
     }
 
     async function attendEvent (event) {
-      // //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //   //         const currentUserId = firebase.auth().currentUser.id;
-      // const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
-      // const userRef = doc(db, 'users', currentUserId);
       const attendeeIds = event.attendees.map(ref => ref.id);
-      const attendeeIndex = attendeeIds.indexOf(userRef.id);
+      const attendeeIndex = attendeeIds.indexOf(currentUserId);
       const eventRef = doc(db, 'events', event.id);
-      console.log('attendee index')
-      console.log(attendeeIndex)
       if (attendeeIndex === -1) {
         event.attendees.push(currentUserId);
         await updateDoc(eventRef, {
@@ -59,11 +52,9 @@
         }).catch((error) => {
           console.error(error);
         });
-
       }
       else {
         event.attendees.splice(attendeeIndex, 1);
-        console.log(event.attendees)
         await updateDoc(eventRef, {
         attendees: arrayRemove(userRef)
         }).then(() => {
@@ -71,8 +62,6 @@
         }).catch((error) => {
           console.error(error);
         });;
-
-
       }
       var audio = new Audio('/src/assets/bark.mp3')
         audio.play();

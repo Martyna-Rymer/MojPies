@@ -6,7 +6,12 @@
         <div v-if="threads">
             <div v-for="(thread, index) in threads" :key="index"  class="thread-item">
                 <router-link :to="{ name: 'forumThread', params: { sectionKey: currentSection.id,  threadId: thread.id} }">{{ thread.topic }}</router-link>
-                <p>{{ thread.userName }}, {{ formatDate(thread.date) }}</p>
+                <p>
+                    <router-link :to="{ name: 'profile', params: { userId: thread.authorData.id } }">
+                        {{ thread.authorData.name }}
+                    </router-link>
+                    , {{ formatDate(thread.date) }}
+                </p>
             </div>
         </div>
       </div>
@@ -24,54 +29,49 @@
   <script>
 
   import { db } from '@/firebase';
-  import router from '@/router';
-  import { useRouter, useRoute } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
   
 
   export default {
     setup() {
-      const currentSection = ref();
-      const threads = ref([]);
-  
-      const formatDate = (timestamp) => {
-      const date = new Date(timestamp.toMillis());
-      const dayOfMonth = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth()+1).padStart(2, '0');
-      const year = date.getFullYear();
-      return `${dayOfMonth}.${month}.${year}`;
-    };
+        const currentSection = ref();
+        const threads = ref([]);
+    
+        const formatDate = (timestamp) => {
+            const date = new Date(timestamp.toMillis());
+            const dayOfMonth = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth()+1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${dayOfMonth}.${month}.${year}`;
+        };
 
-      onMounted(async () => {
-        const route = useRoute();
-        const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}`));
-        const docData = snap.data();
-        const section = { id: snap.id, sectionName: docData.sectionName };
-        currentSection.value = section;
+        const getAuthorData = async (authorRef) => {
+            const authorDoc = await getDoc(authorRef);
+            return {name: authorDoc.data().name, id: authorDoc.id};
+        }
+
+        onMounted(async () => {
+            const route = useRoute();
+            const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}`));
+            const docData = snap.data();
+            const section = { id: snap.id, sectionName: docData.sectionName };
+            currentSection.value = section;
+    
+            const threadSnap = await getDocs(collection(db, `forum/${route.params.sectionKey}/threads`));
+            threads.value = await Promise.all(threadSnap.docs.map(async (doc) => {
+                const data = doc.data();
+                const authorData = await getAuthorData(data.authorRef);
+                return { id: doc.id, date: data.date, ...data, authorData: authorData};
+            }).sort((a, b) => new Date(a.date) - new Date(b.date)));
+        });
   
-        const threadSnap = await getDocs(collection(db, `forum/${route.params.sectionKey}/threads`));
-        threads.value = threadSnap.docs.map((doc) => {
-          const data = doc.data();
-        //   console.log(data.date)
-          return { id: doc.id, date: data.date, ...data };
-        }).sort((a, b) => new Date(a.date) - new Date(b.date));
-  
-        for (const [index, thread] of threads.value.entries()) {
-            try {
-      const userDoc = await getDoc(doc(db, thread.authorRef.path));
-      const userName = userDoc.data().name;
-      threads.value[index] = { ...thread, userName };
-    } catch (e) {
-      console.error(e);
-    }}
-      });
-  
-      return {
-        currentSection,
-        threads,
-        formatDate,
-      }
+        return {
+            currentSection,
+            threads,
+            formatDate,
+        }
     }
 }
 </script>
