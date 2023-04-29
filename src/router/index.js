@@ -41,12 +41,20 @@ const router = createRouter({
       },
     },
     {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../views/ProfileView.vue'),
-    meta: {
-      pageTitle: "Profil",
+      path: '/profiles',
+      name: 'profiles',
+      component: () => import('../views/ProfileList.vue'),
+      meta: {
+        pageTitle: "Użytkownicy",
+      },
     },
+    {
+      path: '/profile/:userId',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: {
+        pageTitle: "Profil",
+      },
     },
     {
       path: '/forum',

@@ -33,6 +33,10 @@ export default {
           <img class="mobile-only" src="/src/assets/profile.png" width="50" height="50">
           <span class="desktop-only">Profil</span>
         </router-link>
+        <router-link to="/profiles" class="nav-link" active-class="active-link">
+          <img class="mobile-only" src="/src/assets/users.png" width="50" height="50">
+          <span class="desktop-only">Użytkownicy</span>
+        </router-link>
         <router-link to="/forum" class="nav-link" active-class="active-link">
           <img class="mobile-only" src="/src/assets/forum.png" width="50" height="50">
           <span class="desktop-only">Forum</span>

@@ -1,31 +1,34 @@
-<script setup>
-import { ref, onMounted, computed } from 'vue';
-
-import { doc, onSnapshot, getDocs, getDoc, query, where } from 'firebase/firestore';
-
-// import { doc, onSnapshot, getDocs, query, where } from 'firebase/firestore'
-import { db, readDocument } from '@/firebase';
-import { collection } from 'firebase/firestore'
-  
-const eventsList = ref([])
-
-onMounted(async () => {
-const querySnapshot = await getDocs(collection(db, 'events'));
-
-const fbEventsList = [];
-for (const doc of querySnapshot.docs) {
-  const event = { id: doc.id, type: doc.data().type, location: doc.data().location, date: doc.data().date, attendees: doc.data().attendees};
-  fbEventsList.push(event);
-}
-
-eventsList.value = fbEventsList;
-});
-</script>
-
 <script>
-export default {
-  methods: {
-    formatDate(timestamp) {
+  import { ref, onMounted } from 'vue';
+  import { doc, getDocs, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+  import { db } from '@/firebase';
+
+  export default {
+    setup() {
+      const eventsList = ref([])
+        //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //         const currentUserId = firebase.auth().currentUser.id;
+      const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
+      const userRef = doc(db, 'users', currentUserId);
+
+    onMounted(async () => {
+    const querySnapshot = await getDocs(collection(db, 'events'));
+
+    const fbEventsList = [];
+    for (const doc of querySnapshot.docs) {
+      const attendeeIds = doc.data().attendees.map(ref => ref.id);
+      const event = { id: doc.id, 
+        type: doc.data().type, 
+        location: doc.data().location, 
+        date: doc.data().date, 
+        attendees: doc.data().attendees, 
+        userAttends: attendeeIds.includes(currentUserId)};
+      fbEventsList.push(event);
+    }
+    eventsList.value = fbEventsList;
+    });
+
+    function formatDate(timestamp) {
       const date = new Date(timestamp.toMillis());
       const days = ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
       const months = ["stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"];
@@ -34,57 +37,65 @@ export default {
       const month = months[date.getMonth()];
       const year = date.getFullYear();
       return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
-    },
+    }
 
+    async function attendEvent (event) {
+      const attendeeIds = event.attendees.map(ref => ref.id);
+      const attendeeIndex = attendeeIds.indexOf(currentUserId);
+      const eventRef = doc(db, 'events', event.id);
+      if (attendeeIndex === -1) {
+        event.attendees.push(currentUserId);
+        await updateDoc(eventRef, {
+        attendees: arrayUnion(userRef)
+        }).then(() => {
+          console.log('User added to attendees array');
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      else {
+        event.attendees.splice(attendeeIndex, 1);
+        await updateDoc(eventRef, {
+        attendees: arrayRemove(userRef)
+        }).then(() => {
+          console.log('User removed from attendees array');
+        }).catch((error) => {
+          console.error(error);
+        });;
+      }
+      var audio = new Audio('/src/assets/bark.mp3')
+        audio.play();
+        window.location.reload();
+    }
 
-    attendEvent (event) {
-      console.log(event.id);
-          const attendeeIndex = event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj');
-          if (attendeeIndex === -1) {
-            event.attendees.push('xo9FaiazKTo5ATkJa7Bj');
-            var audio = new Audio('/src/assets/bark.mp3')
-            audio.play()
-          }
+    return {formatDate, attendEvent, eventsList}
+  }
+}
 
-
-
-
-  //         const user = firebase.auth().currentUser;
-  // if (user) {
-  //   const eventId = event.id;
-  //   const eventRef = db.collection('events').doc(eventId);
-
-  //   eventRef.update({
-  //     attendees: firebase.firestore.FieldValue.arrayUnion(user.uid)
-  //   }).then(() => {
-  //     console.log('User added to attendees array');
-  //   }).catch((error) => {
-  //     console.error(error);
-  //   });
-  // } else {
-  //   console.log('User not logged in');
-  // }
-    const currentUser = 'xo9FaiazKTo5ATkJa7Bj'; // replace with the current user's ID
-    const eventId = event.id;
-    const eventsCollection = collection(db, 'events');
-    console.log(db);
-    const docc = doc(db, 'events/gXKDPe3ZCFfAt2gnNxfK');
-    console.log(getDoc(docc));
-    const attendeesRef = db.collection('events').doc(eventId);
-    attendeesRef.update({
-      attendees: firebase.firestore.FieldValue.arrayUnion(currentUser)
-    })
-    .then(() => {
-      console.log("User added to attendees list");
-    })
-    .catch(error => {
-      console.error("Error adding user to attendees list:", error);
-    });
-        },
-      },
-    };
 </script>
 
+<!-- <template>
+  <div class="container">
+      <div class="row">
+          <div class="col-md-3 mb-3" v-for="user in users" :key="user.id">
+              <router-link :to="{ name: 'profile', params: { userId: user.id } }">
+                  <div class="card shadow rounded">
+                      <div class="d-flex flex-row">
+                      <img :src="user.avatarUrl ? user.avatarUrl : '/src/assets/profile.png'" class="card-img-top user-avatar rounded-circle" alt="User avatar">
+                      <div class="card-body">
+                          <h5 class="card-title">{{ user.name }}, {{ user.city }}</h5>
+                          <div v-for="dog in user.dogs" :key="dog.id">
+                          <p class="card-text"><strong>{{ dog.name }}</strong> {{ dog.race }}, {{ dog.age }}{{ dog.age <= 1 ? ' r.' : ' l.' }}</p>
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+              </router-link>
+          </div>
+      </div>
+  </div>
+</template> -->
+<!-- 
 <template>
   <div class="events">
     <div class="events-list">
@@ -97,8 +108,34 @@ export default {
               <p class="event-subtitle">{{ formatDate(event.date) }}</p>
             </div>
             <div class="attendees">
-              <button :class="{ 'attended': event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj') !== -1, 'not-attended': event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj') === -1 }" @click.prevent="attendEvent(event)">
-                {{ event.attendees.indexOf('xo9FaiazKTo5ATkJa7Bj') !== -1 ? 'Dołączono' : 'Dołącz' }}
+              
+              <button :class="{ 'attended': event.userAttends, 'not-attended': !event.userAttends }" @click.prevent="attendEvent(event)">
+                {{ event.userAttends ? 'Rezygnuję' : 'Dołączam' }}
+              </button>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </div>
+    <router-link to="/newevent" class="add-event-button">
+      <font-awesome-icon :icon="['fas', 'plus']" />
+    </router-link>
+  </div>
+</template> -->
+
+<template>
+  <div class="events">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div v-for="event in eventsList" :key="event.id" class="col">
+        <router-link :to="{ name: 'event', params: { key: event.id } }">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title">{{ event.type }} - {{ event.location }}</h5>
+              <p class="card-text">{{ formatDate(event.date) }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <button :class="{ 'attended': event.userAttends, 'not-attended': !event.userAttends }" @click.prevent="attendEvent(event)">
+                {{ event.userAttends ? 'Rezygnuję' : 'Dołączam' }}
               </button>
             </div>
           </div>
@@ -111,8 +148,8 @@ export default {
   </div>
 </template>
 
-<style>
 
+<style>
 .event-info {
   display: flex;
   justify-content: space-between;
@@ -131,14 +168,19 @@ export default {
   font-size: 12px;
 }
 
-.attended {
-  background-color: rgb(0, 128, 255);
+.attended, .not-attended {
+  border-radius: 1.50rem;
   color: white;
+  transform: perspective(200px) rotateY(0deg);
+  transition: all 0.3s ease;
+}
+
+.attended {
+  background-color: rgb(143, 60, 60);
 }
 
 .not-attended {
-  background-color: green;
-  color: white;
+  background-color: rgb(82, 158, 82);
 }
 
 .details {

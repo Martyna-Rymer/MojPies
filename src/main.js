@@ -35,3 +35,8 @@ if ("serviceWorker" in navigator) {
         .catch(err => console.log("service worker not registered", err))
     })
   }
+
+  async function getUserName (userRef)  {
+    const userDoc = await getDoc(userRef);
+    return userDoc.data().name;
+  }

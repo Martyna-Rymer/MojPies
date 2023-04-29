@@ -1,22 +1,39 @@
 <template>
-  <div v-if="currentThread">
-    {{ currentThread.threadTopic }}
-    <div>
-      {{ currentThread.threadAuthor }}
-      {{ formatDate(currentThread.threadStartDate) }}
-    </div>
-    <div v-for="item in currentThread.answers">
-      {{ item.answer }}
-      <div>
-        {{ item.authorName }}
-        {{ formatDate(item.date) }}
+  <div v-if="currentThread" class="container" style="max-width: 800px;">
+    <div class="card mb-3" style="width: 100%;">
+      <div class="card-body">
+        <h5 class="card-title">{{ currentThread.threadTopic }}</h5>
+        <p class="card-text">{{ currentThread.threadDescription }}</p>
+        <p class="card-text">
+          <router-link :to="{ name: 'profile', params: { userId: currentThread.threadAuthor.id } }">
+            {{ currentThread.threadAuthor.name }}
+          </router-link>,
+          <small class="text-muted">{{ formatDate(currentThread.threadStartDate) }}</small>
+        </p>
       </div>
     </div>
-    <div>
-    <textarea v-model="threadResponse"></textarea>
-  </div>
-      <!-- Zmienic obrazek na Odpowiedz!! -->
-      <img class="bottom-button" src="/src/assets/join.png" height="100" width="100" @click="submitThreadResponse"> 
+
+    <div v-for="item in currentThread.answers" class="card mb-3" style="width: 100%;">
+      <div class="card-body">
+        <p class="card-text">{{ item.answer }}</p>
+        <p class="card-text">
+          <router-link :to="{ name: 'profile', params: { userId: item.authorId } }">
+            {{ item.authorName }}
+          </router-link>,
+          <small class="text-muted">{{ formatDate(item.date) }}</small>
+        </p>
+      </div>
+      <hr class="m-0">
+    </div>
+
+    <div class="card mb-3" style="width: 100%;">
+      <div class="card-body">
+        <textarea v-model="threadResponse" class="form-control w-100"></textarea>
+
+        <!-- Zmienic obrazek na Odpowiedz!!  -->
+        <img class="mt-3 d-block mx-auto" src="/src/assets/join.png" height="100" width="100" @click="submitThreadResponse">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,27 +62,27 @@
         return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`;
       };
       
-      const getAuthorName = async (authorRef) => {
+      const getAuthorData = async (authorRef) => {
         const authorDoc = await getDoc(authorRef);
-        return authorDoc.data().name;
+        return {name: authorDoc.data().name, id: authorDoc.id};
       }
 
       onMounted(async () => {
         const route = useRoute();
         path.value = `forum/${route.params.sectionKey}/threads/${route.params.threadId}`;
-        
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
         const answers = docData.answers.map(async (answer) => {
-          const authorName = await getAuthorName(answer.author);
+          const authorData = await getAuthorData(answer.author);
           return {
             date: answer.date,
             answer: answer.answer,
-            authorName: authorName
+            authorName: authorData.name,
+            authorId: authorData.id
           };
-        });
-        const threadAuthorName = await getAuthorName(docData.authorRef);
-        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorName, threadStartDate: docData.date, answers: await Promise.all(answers) };
+        }).sort((a, b) => new Date(a.date) - new Date(b.date));
+        const threadAuthorData = await getAuthorData(docData.authorRef);
+        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadStartDate: docData.date, answers: await Promise.all(answers) };
         currentThread.value = thread;
       });
 
