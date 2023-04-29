@@ -88,6 +88,22 @@ const router = createRouter({
         pageTitle: "Nowy wątek",
       },
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
+      meta: {
+        pageTitle: "Zarejestruj się",
+    },
+    },
+    {
+      path: '/sign-in',
+      name: 'sign-in',
+      component: () => import('../views/SignInView.vue'),
+      meta: {
+        pageTitle: "Zaloguj się",
+    },
+    },
   ]
 })
 

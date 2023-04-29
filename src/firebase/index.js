@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
 import 'firebase/app';
 import 'firebase/firestore';
 
@@ -30,5 +31,6 @@ export {
     readDocument
 }
 
+export const auth = getAuth(app);
 
 // export default firebase.initializeApp(firebaseConfig);
