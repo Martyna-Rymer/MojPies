@@ -17,6 +17,8 @@
 import { ref, onMounted, computed } from 'vue';
 import { collection, doc, onSnapshot, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/firebase';
+import { auth } from "@/firebase";
+
 
 const forumSections = ref([])
 
@@ -29,6 +31,8 @@ onMounted(async () => {
     const threadsSnapshot = await getDocs(collection(doc.ref, 'threads'));
     section.threadCount = threadsSnapshot.size;
     fbForumSections.push(section);
+    // console.log(auth.currentUser);
+    
   }
 
   forumSections.value = fbForumSections;

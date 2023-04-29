@@ -87,7 +87,15 @@ const router = createRouter({
       meta: {
         pageTitle: "Zarejestruj się",
     },
-  },
+    },
+    {
+      path: '/sign-in',
+      name: 'sign-in',
+      component: () => import('../views/SignInView.vue'),
+      meta: {
+        pageTitle: "Zaloguj się",
+    },
+    },
   ]
 })
 
