@@ -87,57 +87,45 @@ export default {
 
 
 <template>
-    <div class="event-details-container" v-if="currentEvent">
-        <div class="top-container">
-        <img
-      :src="currentEvent.type === 'Spacer' ? '/src/assets/dogWalk2.png' : '/src/assets/dogTraining.png'">
-        <h3>{{ currentEvent.type }}</h3>
+    <div class="scrollable-container">
+        <div class="event-details-container" v-if="currentEvent">
+        <div class="top-container d-flex justify-content-center align-items-center flex-column">
+            <img :src="currentEvent.type === 'Spacer' ? '/src/assets/dogWalk2.png' : '/src/assets/dogTraining.png'" class="img-fluid" style="max-width: 70%;">
+            <h3 class="mt-3 text-center">{{ currentEvent.type }}</h3>
         </div>
         <div class="details-container">
-        <p>Gdzie i kiedy?</p>
-        <p>{{ currentEvent.location }},</p>
-        <p>{{ formatDate(currentEvent.date) }}</p>
-        <p>Opis</p>
-        <p>{{ currentEvent.description }}</p>
-        <p>Uczestnicy</p>
-        <div v-for="attendee in currentEvent.attendeesData">
-            <router-link :to="{ name: 'profile', params: { userId: attendee.attendeeId } }">
+            <p class="small text-muted">Gdzie i kiedy?</p>
+            <h5>{{ currentEvent.location }},</h5>
+            <h6>{{ formatDate(currentEvent.date) }}</h6>
+            <p class="small text-muted mt-3">Opis</p>
+            <h6>{{ currentEvent.description }}</h6>
+            <p class="small text-muted mt-3">Uczestnicy</p>
+            <div v-if="currentEvent.attendeesData.length">
+            <div v-for="attendee in currentEvent.attendeesData">
+                <router-link :to="{ name: 'profile', params: { userId: attendee.attendeeId } }">
                 <p>{{ attendee.attendeeName }}</p>
-            </router-link>
+                </router-link>
+            </div>
+            </div>
+            <p v-else><em>Nikt jeszcze nie dołączył</em></p>
         </div>
+                <div class="d-flex justify-content-center">
+                    <img :src="!currentEvent.userAttends ? '/src/assets/join.png' : '/src/assets/leave.png'" width="80" height="80" @click.prevent="attendEvent(currentEvent)" />
+       
+       </div>
         </div>
-        <img :src="!currentEvent.userAttends ? '/src/assets/join.png' : '/src/assets/leave.png'" 
-        width="80" height="80" @click.prevent="attendEvent(currentEvent)" />
+
     </div>
 </template>
-
-<style>
-img {
-    max-width: 70%;
-    height: auto;
-    object-fit: cover;
-  }
-  .event-details-container {
-    position: fixed;
-    top: 2;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    max-width: 90%;
-    text-align: left;
-  }
-  .top-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .details-container {
-    margin-left: 20px;
-  }
-  .bottom-button {
-    position: fixed;
-    bottom: 55px;
-    right: 25px;
-  }
+  
+  <style>
+.details-container {
+  padding-right: 50px;
+}
+.scrollable-container {
+  height: 500px;
+  overflow-y: scroll;
+}
 </style>
+  
+  

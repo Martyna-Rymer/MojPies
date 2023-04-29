@@ -74,6 +74,28 @@
 
 </script>
 
+<!-- <template>
+  <div class="container">
+      <div class="row">
+          <div class="col-md-3 mb-3" v-for="user in users" :key="user.id">
+              <router-link :to="{ name: 'profile', params: { userId: user.id } }">
+                  <div class="card shadow rounded">
+                      <div class="d-flex flex-row">
+                      <img :src="user.avatarUrl ? user.avatarUrl : '/src/assets/profile.png'" class="card-img-top user-avatar rounded-circle" alt="User avatar">
+                      <div class="card-body">
+                          <h5 class="card-title">{{ user.name }}, {{ user.city }}</h5>
+                          <div v-for="dog in user.dogs" :key="dog.id">
+                          <p class="card-text"><strong>{{ dog.name }}</strong> {{ dog.race }}, {{ dog.age }}{{ dog.age <= 1 ? ' r.' : ' l.' }}</p>
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+              </router-link>
+          </div>
+      </div>
+  </div>
+</template> -->
+<!-- 
 <template>
   <div class="events">
     <div class="events-list">
@@ -99,10 +121,35 @@
       <font-awesome-icon :icon="['fas', 'plus']" />
     </router-link>
   </div>
+</template> -->
+
+<template>
+  <div class="events">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div v-for="event in eventsList" :key="event.id" class="col">
+        <router-link :to="{ name: 'event', params: { key: event.id } }">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title">{{ event.type }} - {{ event.location }}</h5>
+              <p class="card-text">{{ formatDate(event.date) }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <button :class="{ 'attended': event.userAttends, 'not-attended': !event.userAttends }" @click.prevent="attendEvent(event)">
+                {{ event.userAttends ? 'Rezygnuję' : 'Dołączam' }}
+              </button>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </div>
+    <router-link to="/newevent" class="add-event-button">
+      <font-awesome-icon :icon="['fas', 'plus']" />
+    </router-link>
+  </div>
 </template>
 
-<style>
 
+<style>
 .event-info {
   display: flex;
   justify-content: space-between;
@@ -121,14 +168,19 @@
   font-size: 12px;
 }
 
-.attended {
-  background-color: rgb(184, 57, 57);
+.attended, .not-attended {
+  border-radius: 1.50rem;
   color: white;
+  transform: perspective(200px) rotateY(0deg);
+  transition: all 0.3s ease;
+}
+
+.attended {
+  background-color: rgb(143, 60, 60);
 }
 
 .not-attended {
   background-color: rgb(82, 158, 82);
-  color: white;
 }
 
 .details {

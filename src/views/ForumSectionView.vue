@@ -1,30 +1,34 @@
 <template>
-    <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
-    <div v-if="currentSection">
-      <h1>{{ currentSection.sectionName }}</h1>
-      <div class="forum-sections">
-        <div v-if="threads">
-            <div v-for="(thread, index) in threads" :key="index"  class="thread-item">
-                <router-link :to="{ name: 'forumThread', params: { sectionKey: currentSection.id,  threadId: thread.id} }">{{ thread.topic }}</router-link>
-                <p>
-                    <router-link :to="{ name: 'profile', params: { userId: thread.authorData.id } }">
-                        {{ thread.authorData.name }}
-                    </router-link>
-                    , {{ formatDate(thread.date) }}
-                </p>
+    <div class="container mt-4">
+      <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
+      <div v-if="currentSection">
+        <h1 class="text-center">{{ currentSection.sectionName }}</h1>
+        <div class="row justify-content-center">
+          <div class="col-9">
+            <hr>
+            <div v-if="threads">
+              <div v-for="(thread, index) in threads" :key="index" class="card mb-1">
+                <div class="card-body">
+                  <router-link :to="{ name: 'forumThread', params: { sectionKey: currentSection.id, threadId: thread.id } }" class="card-title">{{ thread.topic }}</router-link>
+                  <p class="card-text text-muted">
+                    <small>
+                      <router-link :to="{ name: 'profile', params: { userId: thread.authorData.id } }">{{ thread.authorData.name }}</router-link>, {{ formatDate(thread.date) }}
+                    </small>
+                  </p>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <router-link :to="{ name: 'forumNewThread', params: { sectionKey: currentSection.id } }">
+            <img class="bottom-button" src="/src/assets/add.png" height="100" width="100">
+          </router-link>
         </div>
       </div>
-      <div>
-        <router-link :to="{ name: 'forumNewThread', params: { sectionKey: currentSection.id} }">
-      <img class="bottom-button" src="/src/assets/add.png" height="100" width="100"> 
-    </router-link>
     </div>
-    </div>
-     
   </template>
-
-
+  
   
   <script>
 
@@ -78,6 +82,9 @@
   
 
 <style>
+.card {
+  width: 125%;
+}
   .forum-image {
     max-width: 100%;
   }

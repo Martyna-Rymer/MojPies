@@ -1,28 +1,39 @@
 <template>
-  <div v-if="currentThread">
-    <div>{{ currentThread.threadTopic }}</div>
-    <div>{{ currentThread.threadDescription }}</div>
-
-    <div>
-      <router-link :to="{ name: 'profile', params: { userId: currentThread.threadAuthor.id } }">
-        {{ currentThread.threadAuthor.name }}
-      </router-link>
-        {{ formatDate(currentThread.threadStartDate) }}
-    </div>
-    <div v-for="item in currentThread.answers">
-      {{ item.answer }}
-      <div>
-        <router-link :to="{ name: 'profile', params: { userId: item.authorId } }">
-          {{ item.authorName }}
-        </router-link>
-        {{ formatDate(item.date) }}
+  <div v-if="currentThread" class="container" style="max-width: 800px;">
+    <div class="card mb-3" style="width: 100%;">
+      <div class="card-body">
+        <h5 class="card-title">{{ currentThread.threadTopic }}</h5>
+        <p class="card-text">{{ currentThread.threadDescription }}</p>
+        <p class="card-text">
+          <router-link :to="{ name: 'profile', params: { userId: currentThread.threadAuthor.id } }">
+            {{ currentThread.threadAuthor.name }}
+          </router-link>,
+          <small class="text-muted">{{ formatDate(currentThread.threadStartDate) }}</small>
+        </p>
       </div>
     </div>
-    <div>
-    <textarea v-model="threadResponse"></textarea>
-  </div>
-      <!-- Zmienic obrazek na Odpowiedz!! -->
-      <img class="bottom-button" src="/src/assets/join.png" height="100" width="100" @click="submitThreadResponse"> 
+
+    <div v-for="item in currentThread.answers" class="card mb-3" style="width: 100%;">
+      <div class="card-body">
+        <p class="card-text">{{ item.answer }}</p>
+        <p class="card-text">
+          <router-link :to="{ name: 'profile', params: { userId: item.authorId } }">
+            {{ item.authorName }}
+          </router-link>,
+          <small class="text-muted">{{ formatDate(item.date) }}</small>
+        </p>
+      </div>
+      <hr class="m-0">
+    </div>
+
+    <div class="card mb-3" style="width: 100%;">
+      <div class="card-body">
+        <textarea v-model="threadResponse" class="form-control w-100"></textarea>
+
+        <!-- Zmienic obrazek na Odpowiedz!!  -->
+        <img class="mt-3 d-block mx-auto" src="/src/assets/join.png" height="100" width="100" @click="submitThreadResponse">
+      </div>
+    </div>
   </div>
 </template>
 
