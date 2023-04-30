@@ -28,7 +28,7 @@ const signIn = () => {
         .then((data) => {
             console.log("Successfully signed in!");
             console.log(auth.currentUser);
-            router.push('/forum')   //redirect to forum page
+            router.push('/home')   //redirect to forum page
         })
         .catch((error) => {
             console.log(error.code);
@@ -61,7 +61,7 @@ const signInWithGoogle = () => {
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)
             // ...
-            router.push('/forum')
+            router.push('/home')
         }).catch((error) => {
             // Handle Errors here.
             const errorCode = error.code;

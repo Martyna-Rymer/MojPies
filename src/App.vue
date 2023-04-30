@@ -29,7 +29,7 @@ export default {
   </div>
   <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
     <div class="justify-content-center" id="navbarNav">
-        <router-link to="/" class="nav-link" active-class="active-link">
+        <router-link to="/mainprofile" class="nav-link" active-class="active-link">
           <img class="mobile-only" src="/src/assets/profile.png" width="50" height="50">
           <span class="desktop-only">Profil</span>
         </router-link>
