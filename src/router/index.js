@@ -3,10 +3,23 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+
     {
       path: '/',
+      name: 'starting',
+      component: () => import('../views/StartingPage.vue')
+    },
+    {
+      path: '/home',
       name: 'home',
-      component: () => import('../views/AuthorsView.vue'),
+      component: () => import('../views/HomePage.vue'),
+      meta: {
+    },
+    },
+    {
+      path: '/mainprofile',
+      name: 'mainprofile',
+      component: () => import('../views/ProfileView.vue'),
       meta: {
         pageTitle: "Profil",
       },
@@ -104,6 +117,7 @@ const router = createRouter({
         pageTitle: "Zaloguj się",
     },
     },
+    
   ]
 })
 
