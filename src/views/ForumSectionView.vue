@@ -1,28 +1,30 @@
 <template>
-    <div class="container mt-4">
+    <div class="container" style="margin-bottom: 50px;">
       <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
       <div v-if="currentSection">
         <h1 class="text-center">{{ currentSection.sectionName }}</h1>
-        <div class="row justify-content-center">
           <div class="col-9">
             <hr>
             <div v-if="threads">
               <div v-for="(thread, index) in threads" :key="index" class="card mb-1">
+                <router-link :to="{ name: 'forumThread', params: { sectionKey: currentSection.id, threadId: thread.id } }" class="card-title">
                 <div class="card-body">
-                  <router-link :to="{ name: 'forumThread', params: { sectionKey: currentSection.id, threadId: thread.id } }" class="card-title">{{ thread.topic }}</router-link>
+                    {{ thread.topic }}
                   <p class="card-text text-muted">
                     <small>
-                      <router-link :to="{ name: 'profile', params: { userId: thread.authorData.id } }">{{ thread.authorData.name }}</router-link>, {{ formatDate(thread.date) }}
+                      <router-link :to="{ name: 'profile', params: { userId: thread.authorData.id } }">
+                        {{ thread.authorData.name }}
+                      </router-link>, {{ formatDate(thread.date) }}
                     </small>
                   </p>
                 </div>
+                </router-link>
               </div>
             </div>
           </div>
-        </div>
         <div class="text-center">
           <router-link :to="{ name: 'forumNewThread', params: { sectionKey: currentSection.id } }">
-            <img class="bottom-button" src="/src/assets/add.png" height="100" width="100">
+            <img class="bottom-button" src="/src/assets/add_h.png" width="150"> 
           </router-link>
         </div>
       </div>
@@ -64,11 +66,18 @@
             currentSection.value = section;
     
             const threadSnap = await getDocs(collection(db, `forum/${route.params.sectionKey}/threads`));
+
             threads.value = await Promise.all(threadSnap.docs.map(async (doc) => {
                 const data = doc.data();
                 const authorData = await getAuthorData(data.authorRef);
                 return { id: doc.id, date: data.date, ...data, authorData: authorData};
-            }).sort((a, b) => new Date(a.date) - new Date(b.date)));
+            }))
+
+            threads.value.sort((a, b) => {
+                const dateA = new Date(a.date.toMillis());
+                const dateB = new Date(b.date.toMillis());
+                return dateA - dateB;
+            });
         });
   
         return {

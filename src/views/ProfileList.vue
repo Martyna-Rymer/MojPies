@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="margin-bottom: 50px;">
         <div class="row">
             <div class="col-md-3 mb-3" v-for="user in users" :key="user.id">
                 <router-link :to="{ name: 'profile', params: { userId: user.id } }">

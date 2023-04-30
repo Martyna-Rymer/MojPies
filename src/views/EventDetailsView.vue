@@ -87,45 +87,27 @@ export default {
 
 
 <template>
-    <div class="scrollable-container">
-        <div class="event-details-container" v-if="currentEvent">
-        <div class="top-container d-flex justify-content-center align-items-center flex-column">
-            <img :src="currentEvent.type === 'Spacer' ? '/src/assets/dogWalk2.png' : '/src/assets/dogTraining.png'" class="img-fluid" style="max-width: 70%;">
-            <h3 class="mt-3 text-center">{{ currentEvent.type }}</h3>
-        </div>
-        <div class="details-container">
-            <p class="small text-muted">Gdzie i kiedy?</p>
-            <h5>{{ currentEvent.location }},</h5>
-            <h6>{{ formatDate(currentEvent.date) }}</h6>
-            <p class="small text-muted mt-3">Opis</p>
-            <h6>{{ currentEvent.description }}</h6>
-            <p class="small text-muted mt-3">Uczestnicy</p>
-            <div v-if="currentEvent.attendeesData.length">
-            <div v-for="attendee in currentEvent.attendeesData">
-                <router-link :to="{ name: 'profile', params: { userId: attendee.attendeeId } }">
-                <p>{{ attendee.attendeeName }}</p>
-                </router-link>
+        <div class="event-details-container" style="margin-bottom: 50px;" v-if="currentEvent">
+            <div class="top-container d-flex justify-content-center align-items-center flex-column">
+                <img :src="currentEvent.type === 'Spacer' ? '/src/assets/dogWalk2.png' : '/src/assets/dogTraining.png'" class="img-fluid" style="max-width: 70%;">
+                <h3 class="mt-3 text-center">{{ currentEvent.type }}</h3>
             </div>
+            <div class="details-container me-3">
+                <p class="small text-muted">Gdzie i kiedy?</p>
+                <h5>{{ currentEvent.location }},</h5>
+                <h6>{{ formatDate(currentEvent.date) }}</h6>
+                <p class="small text-muted mt-3">Opis</p>
+                <p>{{ currentEvent.description }}</p>
+                <p class="small text-muted mt-3">Uczestnicy</p>
+                <div v-if="currentEvent.attendeesData.length" v-for="attendee in currentEvent.attendeesData">
+                    <router-link :to="{ name: 'profile', params: { userId: attendee.attendeeId } }">
+                       {{ attendee.attendeeName }}
+                    </router-link>
+                </div>
+                <p v-else><em>Nikt jeszcze nie dołączył</em></p>
             </div>
-            <p v-else><em>Nikt jeszcze nie dołączył</em></p>
+            <div class="d-flex justify-content-center">
+                <img :src="!currentEvent.userAttends ? '/src/assets/join.png' : '/src/assets/leave.png'" width="80" height="80" @click.prevent="attendEvent(currentEvent)" />
         </div>
-                <div class="d-flex justify-content-center">
-                    <img :src="!currentEvent.userAttends ? '/src/assets/join.png' : '/src/assets/leave.png'" width="80" height="80" @click.prevent="attendEvent(currentEvent)" />
-       
-       </div>
         </div>
-
-    </div>
 </template>
-  
-  <style>
-.details-container {
-  padding-right: 50px;
-}
-.scrollable-container {
-  height: 500px;
-  overflow-y: scroll;
-}
-</style>
-  
-  

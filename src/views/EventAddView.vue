@@ -23,7 +23,7 @@
     <!-- <div v-if="showMap"> -->
     <MapView @location-selected="onLocationSelected" :event-geolocation="eventGeolocation"/>
 <!-- </div> -->
-    <img src="/src/assets/add.png" width="70" height="70" v-on:click="addEvent" />
+    <img src="/src/assets/add_h.png" width="150" v-on:click="addEvent" />
 </template>
   
 <script>

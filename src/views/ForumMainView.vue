@@ -1,5 +1,5 @@
 <template>
-    <div class="forum">
+    <div class="forum" style="margin-bottom: 50px;">
       <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
       <div class="d-flex flex-column justify-content-center align-items-center">
         <div class="w-75">

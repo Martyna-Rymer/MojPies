@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentThread" class="container" style="max-width: 800px;">
+  <div v-if="currentThread" class="container">
     <div class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <h5 class="card-title">{{ currentThread.threadTopic }}</h5>
@@ -29,9 +29,7 @@
     <div class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <textarea v-model="threadResponse" class="form-control w-100"></textarea>
-
-        <!-- Zmienic obrazek na Odpowiedz!!  -->
-        <img class="mt-3 d-block mx-auto" src="/src/assets/join.png" height="100" width="100" @click="submitThreadResponse">
+        <img class="mt-3 d-block mx-auto" src="/src/assets/send_h.png" width="150" @click="submitThreadResponse">
       </div>
     </div>
   </div>
@@ -119,3 +117,10 @@
     }
   }
 </script>
+
+<style>
+.container {
+  max-width: 800px; 
+  margin-bottom: 50px;
+}
+</style>

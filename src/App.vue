@@ -30,19 +30,19 @@ export default {
   <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
     <div class="justify-content-center" id="navbarNav">
         <router-link to="/mainprofile" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/profile.png" width="50" height="50">
+          <img class="mobile-only" src="/src/assets/profil_w.png" width="50" height="50">
           <span class="desktop-only">Profil</span>
         </router-link>
         <router-link to="/profiles" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/users.png" width="50" height="50">
+          <img class="mobile-only" src="/src/assets/users_w.png" width="50" height="50">
           <span class="desktop-only">Użytkownicy</span>
         </router-link>
         <router-link to="/forum" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/forum.png" width="50" height="50">
+          <img class="mobile-only" src="/src/assets/forum_w.png" width="50" height="50">
           <span class="desktop-only">Forum</span>
         </router-link>
         <router-link to="/events" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/calendar.png" width="50" height="50">
+          <img class="mobile-only" src="/src/assets/calendar_w.png" width="50" height="50">
           <span class="desktop-only">Wydarzenia</span>
         </router-link>
     </div>
