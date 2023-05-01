@@ -39,7 +39,7 @@
 <script>
   
   import { db } from '@/firebase';
-  import { useRouter, useRoute } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
   
@@ -97,6 +97,10 @@
             author: userRef,
           })
         });
+
+        var audio = new Audio('/src/assets/bark.mp3')
+        audio.play();
+        
         threadResponse.value = '';
         window.location.reload();
       }

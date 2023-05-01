@@ -91,9 +91,9 @@
   
 
 <style>
-.card {
-  width: 125%;
-}
+  .card {
+    width: 125%;
+  }
   .forum-image {
     max-width: 100%;
   }
@@ -112,19 +112,18 @@
   .forum-sections li {
     margin: 20px 0;
   }
-  
-    .forum-sections h3 {
+  .forum-sections h3 {
     font-size: 20px;
     font-weight: bold;
     margin: 0 0 10px;
     border-bottom: 1px solid #ccc;
     padding-bottom: 5px;
     }
-    .forum-sections p {
+  .forum-sections p {
         margin: 0;
         font-size: 14px;
     }
-    .thread-item {
+  .thread-item {
     color: grey;
     }
 </style>

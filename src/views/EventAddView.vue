@@ -1,49 +1,110 @@
 <template>
-    <img src="/src/assets/forest.png">
-    <p>Rodzaj</p>
-    <div class="chip-container">
-        <div :class="['chip', {'selected': eventType === 'Spacer'}]" @click="eventType = 'Spacer'">
-            Spacer
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-4 text-center">
+          <img src="/src/assets/forest.png" class="img-fluid">
         </div>
-        <div :class="['chip', {'selected': eventType === 'Trening'}]" @click="eventType = 'Trening'">
-            Trening
+        <div class="col-md-4">
+            <h4 class="mt-3">Rodzaj</h4>
+            <div class="chip-container">
+                <div :class="['chip', {'selected': eventType === 'Spacer'}]" @click="eventType = 'Spacer'">
+                    Spacer
+                </div>
+                <div :class="['chip', {'selected': eventType === 'Trening'}]" @click="eventType = 'Trening'">
+                    Trening
+                </div>
+            </div>
+          <h4 class="mt-3">Opis</h4>
+          <textarea class="form-control mb-3" v-model="eventDescription"></textarea>
+          <h4 class="mt-3">Data i godzina</h4>
+          <VueDatePicker class="mb-3" format="dd/MM/yyyy H:mm" v-model="eventDate" :enable-time-picker="true" :clearable="false" text-input required></VueDatePicker>
+          <h4 class="mt-3">Miejsce</h4>
+          <input type="text" class="form-control mb-3" v-model="eventLocation" required>
+        <div class="map-wrapper">
+            <div id="map">
+                <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9998">
+                    <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
+                </div>
+            </div>
         </div>
-    </div>
-  
-    <p>Miejsce</p>
-    <input type="text" v-model="eventLocation" required>
-    <p>Współrzędne</p>
-    <input type="text" v-model="eventGeolocation">
+        </div>
+      </div>
+      <div class="mt-3">
+        <img src="/src/assets/add_h.png" width="150" v-on:click="addEvent" />
+      </div>
+    </div> 
+</template> 
 
-    <p>Data i godzina</p>
-    <VueDatePicker format="dd/MM/yyyy H:mm" v-model="eventDate" :enable-time-picker="true" :clearable="false" text-input required></VueDatePicker>
-    <p>Opis</p>
-    <div><textarea v-model="eventDescription"></textarea></div>
-    <button @click="openMap">Select location on map</button>
-    <!-- <div v-if="showMap"> -->
-    <MapView @location-selected="onLocationSelected" :event-geolocation="eventGeolocation"/>
-<!-- </div> -->
-    <img src="/src/assets/add_h.png" width="150" v-on:click="addEvent" />
-</template>
-  
+
 <script>
-  import { ref } from 'vue';
-  import { collection, addDoc } from 'firebase/firestore';
+  import { ref, onMounted, reactive } from 'vue';
+  import { collection, addDoc, doc } from 'firebase/firestore';
   import { db } from '@/firebase';
   import VueDatePicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
-  import MapView from '@/views/MapView.vue';
 
   export default {
-    components: { VueDatePicker, MapView },
+    components: { VueDatePicker},
     setup() {
-        const eventTypes = ref(['Spacer', 'Trening']);
-    const eventType = ref(eventTypes.value[0]);
+      const eventTypes = ref(['Spacer', 'Trening']);
+      const eventType = ref(eventTypes.value[0]);
       const eventLocation = ref('');
-      const eventGeolocation = ref('');
+      const eventGeolocation = ref();
       const eventDate = ref();
       const eventDescription = ref('');
-  
+      const markerPosition = ref()
+
+    const state = reactive({
+      map: null,
+      marker: null,
+      markerCreated: false,
+    });
+
+
+    onMounted(() => {
+        const map = L.map('map').setView([50.06143, 19.93658], 14);
+        state.map = map;
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+
+        const marker = L.marker([50.06143, 19.93658]);
+
+        state.marker = marker;
+        state.markerCreated = true;
+        
+
+        var customIconLayer = L.layerGroup(marker, {icon: L.icon({
+            iconUrl: '/src/assets/marker.png',
+            iconSize: [5, 5],
+            iconAnchor: [25, 25]
+        })});
+
+
+        navigator.geolocation.getCurrentPosition(position => {
+            try {
+                const { latitude, longitude } = position.coords;
+                map.setView([latitude, longitude], 14);
+                marker.setLatLng([latitude, longitude]);
+            }
+            catch {
+                console.log('Not able to get current position')
+            }
+        });
+
+        customIconLayer.addTo(map);
+
+        map.on('moveend', function(e) {
+            const center = map.getCenter();
+            console.log('map center')
+            console.log(center);
+            eventGeolocation.value = [center.lat, center.lng];
+            console.log(eventGeolocation.value)
+        });
+    });
+
       return {
         eventTypes,
         eventType,
@@ -51,6 +112,7 @@
         eventGeolocation,
         eventDate,
         eventDescription,
+        markerPosition,
       };
     },
   
@@ -60,37 +122,31 @@
         alert('Please fill in all required fields');
         return;
       }
-
+    //   const userRef = doc(db, 'users', currentUser.uid);
+      const userRef = doc(db, 'users', 'xo9FaiazKTo5ATkJa7Bj');//to be changed to current user id
         const newEvent = {
           type: this.eventType,
           location: this.eventLocation,
           geolocation: this.eventGeolocation,
           date: this.eventDate,
           description: this.eventDescription,
-          attendees: ['xo9FaiazKTo5ATkJa7Bj'], //to be changed to current user id
+          attendees: [userRef], 
         };
-        console.log(this.eventType);
         const eventsCollection = collection(db, 'events');
         await addDoc(eventsCollection, newEvent);
         console.log('Event added successfully');
+        var audio = new Audio('/src/assets/bark.mp3')
+        audio.play();
         this.$router.push('/events');
       },
-      openMap() {
-            this.showMap = true;
-        },
-      onLocationSelected(location) {
-        this.eventGeolocation = location;
-        console.log(`tu location ${location}`)
-        this.showMap = false;
-    },
     },
     data() {
     return {
-        showMap: false,
         eventGeolocation: {},
+        map: null,
     };
     },
-  };
+  }
 </script>
   
 <style>
@@ -99,22 +155,39 @@
         height: auto;
         object-fit: cover;
     }
+    .marker {
+        position: absolute; 
+        margin-top: -96px; 
+        margin-left: -38px;
+    }
     .chip-container {
-    display: flex;
-    justify-content: center;
+        display: flex;
+        justify-content: left;
     }
 
     .chip {
-    padding: 6px 12px;
-    border-radius: 15px;
-    background-color: #c4c4c4;
-    margin-right: 10px;
-    cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 15px;
+        background-color: #c4c4c4;
+        margin-right: 10px;
+        cursor: pointer;
     }
 
     .selected {
-    background-color: green;
-    color: white;
+        background-color: green;
+        color: white;
+    }
+    .container {
+        margin-bottom: 50px;
+    }
+    .map-wrapper {
+        width: 100%;
+        border: 1px solid green;
+        height: 350px;
+    }
+    #map {
+        width: 100%;
+        height: 350px;
     }
 </style>
   

@@ -18,7 +18,7 @@ export default {
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container-fluid d-flex justify-content-between">
           <a @click="$router.back()">
-          <font-awesome-icon :icon="['fas', 'arrow-left']" /></a>
+          <font-awesome-icon :icon="['fas', 'arrow-left']"  color="white"/></a>
         <span class="navbar-text">
           {{ pageTitle }}
         </span>
@@ -88,11 +88,13 @@ export default {
   .navbar-text,
   .desktop-only {
     font-size: 18px;
+    color: white;
   }
 
   .navbar {
   display: flex;
   align-items: center;
+  z-index: 9999;
 }
 
 .navbar-text {

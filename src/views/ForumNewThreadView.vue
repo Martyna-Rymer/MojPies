@@ -48,6 +48,10 @@
           const path = `forum/${route.params.sectionKey}/threads`;
           const collectionRef = collection(db, path);
           await addDoc(collectionRef, topic);
+
+          var audio = new Audio('/src/assets/bark.mp3')
+          audio.play();
+
           newTopic.value.topic = '';
           newTopic.value.description = '';
           router.back();
