@@ -38,7 +38,7 @@
 
 <script>
   
-  import { db } from '@/firebase';
+  import { db, auth } from '@/firebase';
   import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -86,23 +86,23 @@
 
       const updateThread = async () => {
         const threadRef = doc(db, path.value);
-        //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //   const user = auth.currentUser;
-      // const userRef = doc(db, 'users', user.uid);
-        const userRef = doc(db, 'users', 'xo9FaiazKTo5ATkJa7Bj');
-        await updateDoc(threadRef, {
-          answers: arrayUnion({
-            answer: threadResponse.value,
-            date: new Date(),
-            author: userRef,
-          })
-        });
+        if (auth.currentUser) {
+          const userId = auth.currentUser.uid;
+          const userRef = doc(db, 'users', userId);
+          await updateDoc(threadRef, {
+            answers: arrayUnion({
+              answer: threadResponse.value,
+              date: new Date(),
+              author: userRef,
+            })
+          });
 
-        var audio = new Audio('/src/assets/bark.mp3')
-        audio.play();
-        
-        threadResponse.value = '';
-        window.location.reload();
+          var audio = new Audio('/src/assets/bark.mp3')
+          audio.play();
+
+          threadResponse.value = '';
+          window.location.reload();
+        }
       }
 
       const submitThreadResponse = async () => {

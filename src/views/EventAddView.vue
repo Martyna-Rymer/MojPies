@@ -39,7 +39,7 @@
 <script>
   import { ref, onMounted, reactive } from 'vue';
   import { collection, addDoc, doc } from 'firebase/firestore';
-  import { db } from '@/firebase';
+  import { db, auth } from '@/firebase';
   import VueDatePicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -122,8 +122,9 @@
         alert('Please fill in all required fields');
         return;
       }
-    //   const userRef = doc(db, 'users', currentUser.uid);
-      const userRef = doc(db, 'users', 'xo9FaiazKTo5ATkJa7Bj');//to be changed to current user id
+    if (auth.currentUser) {
+        const userId = auth.currentUser.uid;
+        const userRef = doc(db, 'users', userId);
         const newEvent = {
           type: this.eventType,
           location: this.eventLocation,
@@ -138,7 +139,7 @@
         var audio = new Audio('/src/assets/bark.mp3')
         audio.play();
         this.$router.push('/events');
-      },
+      }}
     },
     data() {
     return {

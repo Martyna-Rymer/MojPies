@@ -24,11 +24,11 @@ const router = createRouter({
         pageTitle: "Profil",
       },
     },
-    {
-      path: '/map',
-      name: 'map',
-      component: () => import('../views/MapView.vue')
-    },
+    // {
+    //   path: '/map',
+    //   name: 'map',
+    //   component: () => import('../components/MapComponent.vue')
+    // },
     {
     path: '/events',
     name: 'events',
