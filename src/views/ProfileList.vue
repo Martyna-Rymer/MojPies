@@ -29,11 +29,6 @@
     export default {
         setup() {
         const users = ref([])
-            //Zmienic!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //         const currentUserId = firebase.auth().currentUser.id;
-        const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
-        const userRef = doc(db, 'users', currentUserId);
-
         const getAge = (year) => {
             const today = (new Date()).getFullYear();
             return today - year;
@@ -74,7 +69,6 @@
         }
         users.value = fbUsersList;
         });
-
         return {users}
         }
     }

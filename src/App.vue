@@ -1,6 +1,8 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import NavBarComponent from '@/components/NavBarComponent.vue';
 export default {
+  components: { NavBarComponent },
   data() {
     return {
       pageTitle: 'Profil',
@@ -27,37 +29,10 @@ export default {
   <div class="container">
     <RouterView />
   </div>
-  <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
-    <div class="justify-content-center" id="navbarNav">
-        <router-link to="/mainprofile" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/profil_w.png" width="50" height="50">
-          <span class="desktop-only">Profil</span>
-        </router-link>
-        <router-link to="/profiles" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/users_w.png" width="50" height="50">
-          <span class="desktop-only">Użytkownicy</span>
-        </router-link>
-        <router-link to="/forum" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/forum_w.png" width="50" height="50">
-          <span class="desktop-only">Forum</span>
-        </router-link>
-        <router-link to="/events" class="nav-link" active-class="active-link">
-          <img class="mobile-only" src="/src/assets/calendar_w.png" width="50" height="50">
-          <span class="desktop-only">Wydarzenia</span>
-        </router-link>
-    </div>
-  </nav>
+  <NavBarComponent />
 </template>
 
 <style scoped>
-  .mobile-only {
-    display: block;
-  }
-
-  .desktop-only {
-    display: none;
-  }
-
   nav {
     width: 100%;
     font-size: 12px;
@@ -85,8 +60,7 @@ export default {
     align-items: center;
   }
 
-  .navbar-text,
-  .desktop-only {
+  .navbar-text {
     font-size: 18px;
     color: white;
   }
@@ -101,14 +75,4 @@ export default {
   flex-grow: 1; 
   text-align: center;
 }
-
-  @media (min-width: 576px) {
-    .mobile-only {
-      display: none;
-    }
-
-    .desktop-only {
-      display: inline-block;
-    }
-  }
 </style>

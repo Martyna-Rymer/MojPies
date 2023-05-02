@@ -28,7 +28,7 @@ const signIn = () => {
         .then((data) => {
             console.log("Successfully signed in!");
             console.log(auth.currentUser);
-            router.push('/home')   //redirect to forum page
+            router.push('/home')
         })
         .catch((error) => {
             console.log(error.code);

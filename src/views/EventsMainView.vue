@@ -34,13 +34,12 @@
 <script>
   import { ref, onMounted, computed } from 'vue';
   import { doc, getDocs, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-  import { db } from '@/firebase';
+  import { db, auth } from '@/firebase';
 
   export default {
     setup() {
       const eventsList = ref([]);
-      const currentUserId = 'xo9FaiazKTo5ATkJa7Bj';
-      const userRef = doc(db, 'users', currentUserId);
+      const currentUserId = ref(null);
       const showFutureEvents = ref(false);
       const showUserEvents = ref(false);
 
@@ -68,19 +67,25 @@
       onMounted(async () => {
         const querySnapshot = await getDocs(collection(db, 'events'));
         const fbEventsList = [];
-        for (const doc of querySnapshot.docs) {
-          const attendeeIds = doc.data().attendees.map(ref => ref.id);
-          const event = {
-            id: doc.id,
-            type: doc.data().type,
-            location: doc.data().location,
-            date: doc.data().date,
-            attendees: doc.data().attendees,
-            userAttends: attendeeIds.includes(currentUserId)
-          };
-          fbEventsList.push(event);
+
+        if (auth.currentUser) {
+          currentUserId.value = auth.currentUser.uid;
+          const userId = auth.currentUser.uid;
+        
+          for (const doc of querySnapshot.docs) {
+            const attendeeIds = doc.data().attendees.map(ref => ref.id);
+            const event = {
+              id: doc.id,
+              type: doc.data().type,
+              location: doc.data().location,
+              date: doc.data().date,
+              attendees: doc.data().attendees,
+              userAttends: attendeeIds.includes(userId)
+            };
+            fbEventsList.push(event);
+          }
+          eventsList.value = fbEventsList;
         }
-        eventsList.value = fbEventsList;
       });
 
       function formatDate(timestamp) {
@@ -95,32 +100,38 @@
       }
 
       async function attendEvent (event) {
-        const attendeeIds = event.attendees.map(ref => ref.id);
-        const attendeeIndex = attendeeIds.indexOf(currentUserId);
-        const eventRef = doc(db, 'events', event.id);
-        if (attendeeIndex === -1) {
-          event.attendees.push(currentUserId);
-          await updateDoc(eventRef, {
-          attendees: arrayUnion(userRef)
-          }).then(() => {
-            console.log('User added to attendees array');
-          }).catch((error) => {
-            console.error(error);
-          });
-        }
-        else {
-          event.attendees.splice(attendeeIndex, 1);
-          await updateDoc(eventRef, {
-          attendees: arrayRemove(userRef)
-          }).then(() => {
-            console.log('User removed from attendees array');
-          }).catch((error) => {
-            console.error(error);
-          });;
-        }
-        var audio = new Audio('/src/assets/bark.mp3')
-          audio.play();
-          window.location.reload();
+        if (auth.currentUser) {
+           const userId = auth.currentUser.uid;
+           const userRef = doc(db, 'users', userId);
+           const attendeeIds = event.attendees.map(ref => ref.id);
+           const attendeeIndex = attendeeIds.indexOf(userId);
+
+           const eventRef = doc(db, 'events', event.id);
+            if (attendeeIndex === -1) {
+              event.attendees.push(userRef);
+              event.userAttends = true;
+              await updateDoc(eventRef, {
+              attendees: arrayUnion(userRef)
+              }).then(() => {
+                console.log('User added to attendees array');
+              }).catch((error) => {
+                console.error(error);
+              });
+            }
+            else {
+              event.attendees.splice(attendeeIndex, 1);
+              event.userAttends = false;
+              await updateDoc(eventRef, {
+              attendees: arrayRemove(userRef)
+              }).then(() => {
+                console.log('User removed from attendees array');
+              }).catch((error) => {
+                console.error(error);
+              });;
+            }
+            var audio = new Audio('/src/assets/bark.mp3')
+              audio.play();
+          }
       }
 
       return { formatDate, attendEvent, filteredEvents, showFutureEvents, showUserEvents };

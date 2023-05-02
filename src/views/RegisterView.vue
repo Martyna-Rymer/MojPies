@@ -27,7 +27,7 @@ const register = () => {
         .then((data) => {
             console.log("Successfully registered!");
             console.log(auth.currentUser)
-            router.push('/home')   //redirect to forum page
+            router.push('/home')
         })
         .catch((error) => {
             console.log(error.code);
