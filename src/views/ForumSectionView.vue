@@ -22,7 +22,7 @@
               </div>
             </div>
           </div>
-        <div class="text-center">
+        <div class="text-center mt-3">
           <router-link :to="{ name: 'forumNewThread', params: { sectionKey: currentSection.id } }">
             <img class="bottom-button" src="/src/assets/add_h.png" width="150"> 
           </router-link>
