@@ -32,5 +32,3 @@ export {
 }
 
 export const auth = getAuth(app);
-
-// export default firebase.initializeApp(firebaseConfig);

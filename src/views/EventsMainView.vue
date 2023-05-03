@@ -25,18 +25,21 @@
         </router-link>
       </div>
     </div>
-  </div>
     <router-link to="/newevent" class="add-event-button">
       <font-awesome-icon :icon="['fas', 'plus']" />
     </router-link>
+  </div>
+  <NavBarComponent />
 </template>
 
 <script>
   import { ref, onMounted, computed } from 'vue';
   import { doc, getDocs, collection, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
   import { db, auth } from '@/firebase';
+  import NavBarComponent from '@/components/NavBarComponent.vue';
 
   export default {
+    components: {  NavBarComponent },
     setup() {
       const eventsList = ref([]);
       const currentUserId = ref(null);

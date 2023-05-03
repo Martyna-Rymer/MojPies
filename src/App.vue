@@ -1,8 +1,6 @@
 <script>
 import { RouterView } from 'vue-router'
-import NavBarComponent from '@/components/NavBarComponent.vue';
 export default {
-  components: { NavBarComponent },
   data() {
     return {
       pageTitle: 'Profil',
@@ -29,7 +27,6 @@ export default {
   <div class="container">
     <RouterView />
   </div>
-  <NavBarComponent />
 </template>
 
 <style scoped>

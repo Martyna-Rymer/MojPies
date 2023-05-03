@@ -1,15 +1,18 @@
 <script>
-
   import { db } from '@/firebase';
   import { useRoute } from 'vue-router'
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { getDoc, doc } from 'firebase/firestore';
   import { auth } from "@/firebase";
+  import NavBarComponent from '@/components/NavBarComponent.vue';
   
 
   export default {
+    components: { NavBarComponent },
     setup() {
         const profileData = ref();
+        const isCurrentUser = ref();
+        const userId = ref()
 
         const getAge = (year) => {
             const today = (new Date()).getFullYear();
@@ -19,7 +22,6 @@
 
         onMounted(async () => {
             const route = useRoute();
-            // console.log(route.params.userId)
             const snap = await getDoc(doc(db, `users/${route.params.userId}`));
             const docData = snap.data();
             const dogs = docData.dogs.map(dog => {
@@ -28,11 +30,18 @@
             });
             const user = { id: snap.id, userName: docData.name, description: docData.description, city: docData.city, dogs: dogs, avatarUrl: docData.avatarUrl, favourites: docData.favourites};
             profileData.value = user;
-            // console.log('current user', auth.currentUser.uid)
+            if (auth.currentUser) {
+                isCurrentUser.value = route.params.userId == auth.currentUser.uid;
+                userId.value = auth.currentUser.uid
+            }
+        });
+
+        const showEditButton = computed(() => {
+            return isCurrentUser.value;
         });
   
         return {
-            profileData,
+            profileData, showEditButton, userId
         }
     }
 }
@@ -42,6 +51,11 @@
 <template>
     <div class="container ml-2 me-2" style="margin-bottom: 70px;">
       <div v-if="profileData">
+        <div v-if="showEditButton" class="d-flex flex-row-reverse mb-3">
+            <router-link :to="{ name: 'editprofile', params: { userId: userId } }">
+                <button class="button1">Edytuj</button>
+            </router-link>
+        </div>
         <div class="row justify-content-center">
             <img :src="profileData.avatarUrl ? profileData.avatarUrl : '/src/assets/profile.png'" class="card-img-top user-avatar rounded-circle mb-3" alt="User avatar">
             <div class="col-md-9 text-center">
@@ -72,6 +86,7 @@
         </div>
       </div>
     </div>
+    <NavBarComponent />
 </template>
   
 <style scoped>
@@ -79,4 +94,24 @@
         width: 220px; 
         height: 200px;
     }
+
+    .button1 {
+        background-color: white; 
+        color: #4CAF50;
+        border: none;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+    .button1:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
+
 </style>

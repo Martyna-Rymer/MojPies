@@ -27,7 +27,8 @@ const register = () => {
         .then((data) => {
             console.log("Successfully registered!");
             console.log(auth.currentUser)
-            router.push('/home')
+            router.push({ name: 'editprofile', params: { userId: auth.currentUser.uid } })
+            // router.push('/home')
         })
         .catch((error) => {
             console.log(error.code);
@@ -46,7 +47,9 @@ const signInWithGoogle = () => {
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)
             // ...
-            router.push('/home')
+            console.log(auth.currentUser)
+            router.push({ name: 'editprofile', params: { userId: auth.currentUser.uid } })
+            // router.push('/home')
         }).catch((error) => {
             // Handle Errors here.
             const errorCode = error.code;

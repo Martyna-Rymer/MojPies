@@ -14,17 +14,20 @@
         </button>
       </form>
     </div>
-  </template>
+    <NavBarComponent />
+</template>
   
   
   
-  <script>
+<script>
     import { db, auth } from '@/firebase';
     import { doc, collection, addDoc } from 'firebase/firestore';
     import { useRouter, useRoute } from 'vue-router'
     import { ref, computed } from 'vue';
+    import NavBarComponent from '@/components/NavBarComponent.vue';
     
     export default {
+    components: {  NavBarComponent },
       setup() {
         const router = useRouter();
         const route = useRoute();
@@ -64,7 +67,7 @@
         return { newTopic, submitTopic, isFormValid };
       },
     };
-  </script>
+</script>
 
 <style scoped>
   img {

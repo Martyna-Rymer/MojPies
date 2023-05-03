@@ -29,18 +29,21 @@
         </div>
       </div>
     </div>
-  </template>
+    <NavBarComponent />
+</template>
   
   
-  <script>
+<script>
 
   import { db } from '@/firebase';
   import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
+  import NavBarComponent from '@/components/NavBarComponent.vue';
   
 
   export default {
+    components: {  NavBarComponent },
     setup() {
         const currentSection = ref();
         const threads = ref([]);

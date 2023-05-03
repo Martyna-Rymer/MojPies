@@ -17,18 +17,13 @@ const router = createRouter({
     },
     },
     {
-      path: '/mainprofile',
-      name: 'mainprofile',
-      component: () => import('../views/ProfileView.vue'),
+      path: '/editprofile:userId',
+      name: 'editprofile',
+      component: () => import('../views/ProfileEdit.vue'),
       meta: {
-        pageTitle: "Profil",
+        pageTitle: "Edytuj profil",
       },
     },
-    // {
-    //   path: '/map',
-    //   name: 'map',
-    //   component: () => import('../components/MapComponent.vue')
-    // },
     {
     path: '/events',
     name: 'events',

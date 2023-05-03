@@ -18,6 +18,7 @@
         </div>
         <EventAttendance/>
     </div>
+    <NavBarComponent />
 </template>
 
 <script>
@@ -27,9 +28,10 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import MapComponent from '@/components/MapComponent.vue';
 import EventAttendance from '@/components/EventAttendance.vue';
+import NavBarComponent from '@/components/NavBarComponent.vue';
   
 export default {
-    components: { MapComponent, EventAttendance },
+    components: { MapComponent, EventAttendance, NavBarComponent },
     setup() {
     const currentEvent = ref()
 

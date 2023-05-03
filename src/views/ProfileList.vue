@@ -18,6 +18,7 @@
             </div>
         </div>
     </div>
+    <NavBarComponent />
 </template>
 
 <script>
@@ -25,8 +26,10 @@
     import { doc, getDocs, collection } from 'firebase/firestore';
     // import { getStorage, getDownloadURL } from 'firebase/storage';
     import { db } from '@/firebase';
+    import NavBarComponent from '@/components/NavBarComponent.vue';
 
     export default {
+        components: { NavBarComponent },
         setup() {
         const users = ref([])
         const getAge = (year) => {

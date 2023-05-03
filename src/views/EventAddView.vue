@@ -33,6 +33,7 @@
         <img src="/src/assets/add_h.png" width="150" v-on:click="addEvent" />
       </div>
     </div> 
+    <NavBarComponent />
 </template> 
 
 
@@ -42,9 +43,10 @@
   import { db, auth } from '@/firebase';
   import VueDatePicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
+  import NavBarComponent from '@/components/NavBarComponent.vue';
 
   export default {
-    components: { VueDatePicker},
+    components: { VueDatePicker, NavBarComponent},
     setup() {
       const eventTypes = ref(['Spacer', 'Trening']);
       const eventType = ref(eventTypes.value[0]);

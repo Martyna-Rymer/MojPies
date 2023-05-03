@@ -33,6 +33,7 @@
       </div>
     </div>
   </div>
+  <NavBarComponent />
 </template>
 
 
@@ -42,9 +43,11 @@
   import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+  import NavBarComponent from '@/components/NavBarComponent.vue';
   
 
   export default {
+    components: { NavBarComponent },
     setup() {
       const threadResponse = ref('');
       const currentThread = ref();

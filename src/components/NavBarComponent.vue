@@ -19,6 +19,7 @@
     }
 </script>
 
+
 <template>
 
   <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
@@ -78,10 +79,10 @@
   }
 
   .navbar {
-  display: flex;
-  align-items: center;
-  z-index: 9999;
-}
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+  }
 
   @media (min-width: 576px) {
     .mobile-only {

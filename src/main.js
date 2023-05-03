@@ -26,8 +26,8 @@ if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
       navigator.serviceWorker
       navigator.serviceWorker.register (
-        '/PWA/serviceWorker.js',
-        {scope: '/PWA/'}
+        '/MojPies/serviceWorker.js',
+        {scope: '/MojPies/'}
       )
         .then(res => console.log("service worker registered"))
         .catch(err => console.log("service worker not registered", err))
