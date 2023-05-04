@@ -5,7 +5,7 @@
                 <router-link :to="{ name: 'profile', params: { userId: user.id } }">
                     <div class="card shadow rounded">
                         <div class="d-flex flex-row">
-                        <img :src="user.avatarUrl ? user.avatarUrl : '/src/assets/profile.png'" class="card-img-top user-avatar rounded-circle" alt="User avatar">
+                        <img :src="user.imageSrc" class="card-img-top user-avatar rounded-circle mb-3" alt="User avatar">
                         <div class="card-body">
                             <h5 class="card-title">{{ user.name }}, {{ user.city }}</h5>
                             <div v-for="dog in user.dogs" :key="dog.id">
@@ -23,32 +23,20 @@
 
 <script>
     import { ref, onMounted } from 'vue';
-    import { doc, getDocs, collection } from 'firebase/firestore';
-    // import { getStorage, getDownloadURL } from 'firebase/storage';
-    import { db } from '@/firebase';
+    import { getDocs, collection } from 'firebase/firestore';
+    import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+    import { db, storage } from '@/firebase/index.js';
     import NavBarComponent from '@/components/NavBarComponent.vue';
 
     export default {
         components: { NavBarComponent },
         setup() {
         const users = ref([])
+
         const getAge = (year) => {
             const today = (new Date()).getFullYear();
             return today - year;
         };
-
-
-        // async function getImageUrl(avatarUrl) {
-        //     const storage = getStorage();
-        //     const gsReference = ref(storage, avatarUrl);
-        //     try {
-        //         const url = await getDownloadURL(gsReference);
-        //         return url;
-        //     } catch (error) {
-        //         console.log('Error getting image URL:', error);
-        //         return '';
-        //     }
-        // }
 
         onMounted(async () => {
         const querySnapshot = await getDocs(collection(db, 'users'));
@@ -60,17 +48,29 @@
                 const age = getAge(dog.yearOfBirth);
                 return { name: dog.name, race: dog.race, age: age };
             });
+
+            let imageSrc;
+            await getDownloadURL(storageRef(storage, `images/${doc.id}`))
+            .then((url) => {
+                imageSrc = url
+            })
+            .catch((error) => {
+                imageSrc = '/src/assets/profile.png'
+            });
+
             const user = { 
                 id: doc.id, 
                 name: data.name,
                 city: data.city,
                 dogs: dogs,
-                // avatarUrl: getImageUrl(data.avatarUrl)
+                imageSrc: imageSrc,
             };
             
             fbUsersList.push(user);
         }
         users.value = fbUsersList;
+
+
         });
         return {users}
         }

@@ -2,7 +2,8 @@
     <p class="small text-muted mt-3 mb-1">Uczestnicy</p>
     <div v-if="attendeesData.length" v-for="attendee in attendeesData">
         <router-link :to="{ name: 'profile', params: { userId: attendee.attendeeId } }">
-            {{ attendee.attendeeName }}
+          <img :src="attendee.attendeeImgSrc" class="user-avatar rounded-circle" alt="User avatar">
+          {{ attendee.attendeeName }}
         </router-link>
     </div>
     <p v-else><em>Nikt jeszcze nie dołączył</em></p>
@@ -15,7 +16,8 @@
   import { ref, onMounted, computed } from 'vue';
   import { useRoute } from 'vue-router'
   import { doc, getDoc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
-  import { db, auth } from '@/firebase';
+  import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+  import { db, auth, storage } from '@/firebase/index.js';
   
   export default {
     setup() {
@@ -30,10 +32,18 @@
         const attendeeIds = docData.attendees.map(ref => ref.id);
         const attendees = await Promise.all(docData.attendees.map(async (ref) => {
         const attendee = await getUserData(ref);
+        let imageSrc;
+        await getDownloadURL(storageRef(storage, `images/${ref.id}`))
+        .then((url) => {
+            imageSrc = url
+        })
+        .catch((error) => {
+            imageSrc = '/src/assets/profile.png'
+        });
         return {
             attendeeId: ref.id,
-            // avatar: ,
-            attendeeName: attendee.name
+            attendeeName: attendee.name,
+            attendeeImgSrc: imageSrc
         };
         }));
         attendeesData.value = attendees;
@@ -100,4 +110,11 @@
     }
   }
 </script>
+
+<style>
+  .user-avatar {
+      width: 15px; 
+      height: 15px;
+  }
+</style>
   

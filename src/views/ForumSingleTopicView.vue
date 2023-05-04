@@ -6,6 +6,7 @@
         <p class="card-text">{{ currentThread.threadDescription }}</p>
         <p class="card-text">
           <router-link :to="{ name: 'profile', params: { userId: currentThread.threadAuthor.id } }">
+            <img :src="currentThread.threadAuthorImg" class="user-avatar rounded-circle" alt="User avatar">
             {{ currentThread.threadAuthor.name }}
           </router-link>,
           <small class="text-muted">{{ formatDate(currentThread.threadStartDate) }}</small>
@@ -18,6 +19,7 @@
         <p class="card-text">{{ item.answer }}</p>
         <p class="card-text">
           <router-link :to="{ name: 'profile', params: { userId: item.authorId } }">
+            <img :src="item.imageSrc" class="user-avatar rounded-circle" alt="User avatar">
             {{ item.authorName }}
           </router-link>,
           <small class="text-muted">{{ formatDate(item.date) }}</small>
@@ -39,9 +41,11 @@
 
 <script>
   
-  import { db, auth } from '@/firebase';
+  // import { db, auth } from '@/firebase';
   import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
+  import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+  import { db, auth, storage } from '@/firebase/index.js';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
   import NavBarComponent from '@/components/NavBarComponent.vue';
   
@@ -65,25 +69,45 @@
       
       const getAuthorData = async (authorRef) => {
         const authorDoc = await getDoc(authorRef);
+
         return {name: authorDoc.data().name, id: authorDoc.id};
       }
 
       onMounted(async () => {
         const route = useRoute();
         path.value = `forum/${route.params.sectionKey}/threads/${route.params.threadId}`;
+        let imageSrc;
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
         const answers = docData.answers.map(async (answer) => {
-          const authorData = await getAuthorData(answer.author);
-          return {
-            date: answer.date,
-            answer: answer.answer,
-            authorName: authorData.name,
-            authorId: authorData.id
-          };
+        const authorData = await getAuthorData(answer.author);
+
+        
+        await getDownloadURL(storageRef(storage, `images/${authorData.id}`))
+        .then((url) => {
+            imageSrc = url
+        })
+        .catch((error) => {
+            imageSrc = '/src/assets/profile.png'
+        });
+
+        return {
+          date: answer.date,
+          answer: answer.answer,
+          authorName: authorData.name,
+          authorId: authorData.id,
+          imageSrc: imageSrc
+        };
         }).sort((a, b) => new Date(a.date) - new Date(b.date));
         const threadAuthorData = await getAuthorData(docData.authorRef);
-        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadStartDate: docData.date, answers: await Promise.all(answers) };
+        await getDownloadURL(storageRef(storage, `images/${threadAuthorData.id}`))
+        .then((url) => {
+            imageSrc = url
+        })
+        .catch((error) => {
+            imageSrc = '/src/assets/profile.png'
+        });
+        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadAuthorImg: imageSrc, threadStartDate: docData.date, answers: await Promise.all(answers) };
         currentThread.value = thread;
       });
 
@@ -126,8 +150,12 @@
 </script>
 
 <style>
-.container {
-  max-width: 800px; 
-  margin-bottom: 50px;
-}
+  .container {
+    max-width: 800px; 
+    margin-bottom: 50px;
+  }
+  .user-avatar {
+        width: 20px; 
+        height: 20px;
+  }
 </style>

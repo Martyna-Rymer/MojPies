@@ -7,6 +7,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import VueImageChooser from 'vue-image-chooser'
 
 
 library.add(fas, fab)
@@ -19,6 +20,7 @@ const app = createApp(App)
 app.use(router)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.component(VueDatePicker)
+app.component(VueImageChooser)
 
 app.mount('#app')
 

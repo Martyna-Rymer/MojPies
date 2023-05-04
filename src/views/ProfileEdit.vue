@@ -1,6 +1,10 @@
 <template>
     <div class="container ml-2 me-2" style="margin-bottom: 70px;">
         <div v-if="profileData">
+            <div class="text-center">
+                <img id="profile-image" class="card-img-top user-avatar rounded-circle mb-3">
+            </div>
+            <div><ImagePicker :user-id="userId" /></div>
             <form @submit.prevent="saveChanges">
             <div class="form-group">
                 <label for="profileData.userName">Nazwa użytkownika</label>
@@ -27,7 +31,7 @@
                     </div>
                 </div>
                 </div>
-                <button type="button" class="btn btn-primary mt-2" @click="addPlace">Dodaj miejsce</button>
+                <div><button type="button" class="btn btn-primary mt-2" @click="addPlace">Dodaj miejsce</button></div>
             </div>
             <div class="form-group">
                 <label for="dogs">Psy</label>
@@ -47,7 +51,7 @@
                     </div>
                 </div>
                 </div>
-                <button type="button" class="btn btn-primary mt-2" @click="addDog">Dodaj psa</button>
+                <div><button type="button" class="btn btn-primary mt-2" @click="addDog">Dodaj psa</button></div>
             </div>
             <button type="submit" class="d-block mx-auto mt-3"><img src="/src/assets/save_h.png" width="150" @click="saveChanges"></button>
             </form>
@@ -61,15 +65,20 @@
 <script>
 import { db } from '@/firebase';
 import { useRoute } from 'vue-router'
-import { ref, onMounted, reactive } from 'vue';
+import { ref as vueRef, onMounted, reactive } from 'vue';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import router from '../router';
 import NavBarComponent from '@/components/NavBarComponent.vue';
+import ImagePicker from '@/components/ImagePicker.vue';
+import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/firebase/index.js';
+// import VueImagePicker from "vue-image-picker";
+
 
 export default {
-  components: { NavBarComponent },
+  components: { NavBarComponent, ImagePicker },
   setup() {
-    const userId = ref()
+    const userId = vueRef()
     const profileData = reactive({
       id: null,
       name: '',
@@ -78,6 +87,8 @@ export default {
       favourites: [],
       dogs: []
     })
+    const image = vueRef(null)
+
 
     onMounted(async () => {
 
@@ -94,6 +105,16 @@ export default {
         profileData.description = docData.description
         profileData.favourites = docData.favourites || []
         profileData.dogs = docData.dogs || []
+
+        const img = document.getElementById('profile-image');
+        getDownloadURL(storageRef(storage, `images/${route.params.userId}`))
+        .then((url) => {
+            img.setAttribute('src', url);
+        })
+        .catch((error) => {
+            img.setAttribute('src', '/src/assets/profile.png');
+        });
+
     })
 
     const addDog = () => {
@@ -131,6 +152,36 @@ export default {
       }
     }
 
+
+
+    // function click1() {
+    //     this.$refs.input1.click()   
+    //     }
+
+    // function previewImage(event) {
+    // this.uploadValue=0;
+    // this.img1=null;
+    // this.imageData = event.target.files[0];
+    // this.onUpload()
+    // }
+
+    // function onUpload(){
+    // this.img1=null;
+    // const storageRef=firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+    // storageRef.on(`state_changed`,snapshot=>{
+    // this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+    //     }, error=>{console.log(error.message)},
+    // ()=>{this.uploadValue=100;
+    //     storageRef.snapshot.ref.getDownloadURL().then((url)=>{
+    //         this.img1 =url;
+    //         console.log(this.img1)
+    //         });
+    //     }      
+    //     );
+    // }
+
+
+
     return {
       userId,
       profileData,
@@ -138,9 +189,19 @@ export default {
       removeDog,
       addPlace,
       removePlace,
-      saveChanges
+      saveChanges,
+    //   click1,
+    //   previewImage,
+    //   onUpload
     }
   }
 }
 
 </script>
+
+<style scoped>
+    .user-avatar {
+        width: 220px; 
+        height: 200px;
+    }
+</style>

@@ -17,6 +17,7 @@
     "date-fns": "^2.16.1",
     "firebase": "^9.20.0",
     "vue": "^3.2.47",
+    "vue-image-chooser": "^0.5.14",
     "vue-router": "^4.1.6",
     "vuejs-datetimepicker": "^1.1.13"
   },

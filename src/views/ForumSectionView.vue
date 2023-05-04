@@ -13,6 +13,7 @@
                   <p class="card-text text-muted">
                     <small>
                       <router-link :to="{ name: 'profile', params: { userId: thread.authorData.id } }">
+                        <img :src="thread.imageSrc" class="user-avatar rounded-circle" alt="User avatar">
                         {{ thread.authorData.name }}
                       </router-link>, {{ formatDate(thread.date) }}
                     </small>
@@ -35,10 +36,11 @@
   
 <script>
 
-  import { db } from '@/firebase';
   import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
+  import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+  import { db, storage } from '@/firebase/index.js';
   import NavBarComponent from '@/components/NavBarComponent.vue';
   
 
@@ -73,7 +75,17 @@
             threads.value = await Promise.all(threadSnap.docs.map(async (doc) => {
                 const data = doc.data();
                 const authorData = await getAuthorData(data.authorRef);
-                return { id: doc.id, date: data.date, ...data, authorData: authorData};
+
+                let imageSrc;
+                await getDownloadURL(storageRef(storage, `images/${route.params.userId}`))
+                .then((url) => {
+                    imageSrc = url
+                })
+                .catch((error) => {
+                    imageSrc = '/src/assets/profile.png'
+                });
+
+                return { id: doc.id, date: data.date, ...data, authorData: authorData, imageSrc: imageSrc};
             }))
 
             threads.value.sort((a, b) => {
@@ -123,12 +135,16 @@
     padding-bottom: 5px;
     }
   .forum-sections p {
-        margin: 0;
-        font-size: 14px;
+    margin: 0;
+    font-size: 14px;
     }
   .thread-item {
     color: grey;
     }
+  .user-avatar {
+      width: 20px; 
+      height: 20px;
+  }
 </style>
 
 

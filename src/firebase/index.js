@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import 'firebase/app';
 import 'firebase/firestore';
@@ -16,6 +17,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
+const storage = getStorage(app);
 
 
 async function readDocument () {
@@ -28,7 +30,8 @@ async function readDocument () {
 
 export {
     db,
-    readDocument
+    readDocument,
+    storage
 }
 
 export const auth = getAuth(app);

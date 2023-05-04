@@ -28,7 +28,8 @@ const signIn = () => {
         .then((data) => {
             console.log("Successfully signed in!");
             console.log(auth.currentUser);
-            router.push('/home')
+            // router.push('/home')
+            router.push({ name: 'editprofile', params: { userId: auth.currentUser.uid } })
         })
         .catch((error) => {
             console.log(error.code);
@@ -61,7 +62,8 @@ const signInWithGoogle = () => {
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)
             // ...
-            router.push('/home')
+            // router.push('/home')
+            router.push({ name: 'editprofile', params: { userId: auth.currentUser.uid } })
         }).catch((error) => {
             // Handle Errors here.
             const errorCode = error.code;

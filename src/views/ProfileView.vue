@@ -1,53 +1,3 @@
-<script>
-  import { db } from '@/firebase';
-  import { useRoute } from 'vue-router'
-  import { ref, onMounted, computed } from 'vue';
-  import { getDoc, doc } from 'firebase/firestore';
-  import { auth } from "@/firebase";
-  import NavBarComponent from '@/components/NavBarComponent.vue';
-  
-
-  export default {
-    components: { NavBarComponent },
-    setup() {
-        const profileData = ref();
-        const isCurrentUser = ref();
-        const userId = ref()
-
-        const getAge = (year) => {
-            const today = (new Date()).getFullYear();
-            return today - year;
-        };
-    
-
-        onMounted(async () => {
-            const route = useRoute();
-            const snap = await getDoc(doc(db, `users/${route.params.userId}`));
-            const docData = snap.data();
-            const dogs = docData.dogs.map(dog => {
-                const age = getAge(dog.yearOfBirth);
-                return { name: dog.name, race: dog.race, age: age };
-            });
-            const user = { id: snap.id, userName: docData.name, description: docData.description, city: docData.city, dogs: dogs, avatarUrl: docData.avatarUrl, favourites: docData.favourites};
-            profileData.value = user;
-            if (auth.currentUser) {
-                isCurrentUser.value = route.params.userId == auth.currentUser.uid;
-                userId.value = auth.currentUser.uid
-            }
-        });
-
-        const showEditButton = computed(() => {
-            return isCurrentUser.value;
-        });
-  
-        return {
-            profileData, showEditButton, userId
-        }
-    }
-}
-</script>
-
-
 <template>
     <div class="container ml-2 me-2" style="margin-bottom: 70px;">
       <div v-if="profileData">
@@ -57,9 +7,12 @@
             </router-link>
         </div>
         <div class="row justify-content-center">
-            <img :src="profileData.avatarUrl ? profileData.avatarUrl : '/src/assets/profile.png'" class="card-img-top user-avatar rounded-circle mb-3" alt="User avatar">
+            <div class="text-center">
+                <img :src="imageSrc" class="card-img-top user-avatar rounded-circle mb-3" alt="User avatar">
+            
+            </div>
             <div class="col-md-9 text-center">
-            <h1>{{ profileData.userName }}</h1>
+                <h1>{{ profileData.userName }}</h1>
           </div>
         </div>
         <div class="row justify-content-start text-left">
@@ -88,6 +41,71 @@
     </div>
     <NavBarComponent />
 </template>
+
+
+<script>
+  import { useRoute } from 'vue-router'
+  import { ref, onMounted, computed } from 'vue';
+  import { getDoc, doc } from 'firebase/firestore';
+  import { ref as storageRef, getDownloadURL } from 'firebase/storage';
+  import { db, storage } from '@/firebase/index.js';
+  import { auth } from "@/firebase";
+  import NavBarComponent from '@/components/NavBarComponent.vue';
+  
+
+  export default {
+    components: { NavBarComponent },
+    setup() {
+        const profileData = ref();
+        const isCurrentUser = ref();
+        const userId = ref()
+        const imageSrc = ref()
+
+        const getAge = (year) => {
+            const today = (new Date()).getFullYear();
+            return today - year;
+        };
+    
+
+        onMounted(async () => {
+            const route = useRoute();
+            const snap = await getDoc(doc(db, `users/${route.params.userId}`));
+            const docData = snap.data();
+            const dogs = docData.dogs.map(dog => {
+                const age = getAge(dog.yearOfBirth);
+                return { name: dog.name, race: dog.race, age: age };
+            });
+            const user = { id: snap.id, userName: docData.name, description: docData.description, city: docData.city, dogs: dogs, avatarUrl: docData.avatarUrl, favourites: docData.favourites};
+            profileData.value = user;
+
+
+            await getDownloadURL(storageRef(storage, `images/${route.params.userId}`))
+            .then((url) => {
+                imageSrc.value = url
+            })
+            .catch((error) => {
+                imageSrc.value = '/src/assets/profile.png'
+            });
+
+            if (auth.currentUser) {
+                isCurrentUser.value = route.params.userId == auth.currentUser.uid;
+                userId.value = auth.currentUser.uid
+            }
+        });
+
+        const showEditButton = computed(() => {
+            return isCurrentUser.value;
+        });
+  
+        return {
+            profileData, showEditButton, userId, imageSrc
+        }
+    }
+}
+</script>
+
+
+
   
 <style scoped>
     .user-avatar {
@@ -112,6 +130,10 @@
     .button1:hover {
         background-color: #4CAF50;
         color: white;
+    }
+    .user-avatar {
+        width: 220px; 
+        height: 200px;
     }
 
 </style>
