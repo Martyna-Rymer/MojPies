@@ -20,17 +20,8 @@ const db = getFirestore();
 const storage = getStorage(app);
 
 
-async function readDocument () {
-  const snap = await getDoc(doc(db, 'events/gXKDPe3ZCFfAt2gnNxfK'));
-  const docData = snap.data();
-  console.log(docData.type);
-  return docData;
-  
-  }
-
 export {
     db,
-    readDocument,
     storage
 }
 
