@@ -10,9 +10,6 @@
         if (user) {
             currentUserId.value = user.uid;
         }
-        else {
-            currentUserId.value = 'hAiYomFrOoNKtzk6kaSOjcctb053';
-        }
         console.log(currentUserId.value);
         return { currentUserId};
         }

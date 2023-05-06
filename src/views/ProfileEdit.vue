@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 </div>
-                <div><button type="button" class="btn btn-primary mt-2" @click="addPlace">Dodaj miejsce</button></div>
+                <div><button type="button" class="btn btn-success mt-2" @click="addPlace">Dodaj miejsce</button></div>
             </div>
             <div class="form-group">
                 <label for="dogs">Psy</label>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 </div>
-                <div><button type="button" class="btn btn-primary mt-2" @click="addDog">Dodaj psa</button></div>
+                <div><button type="button" class="btn btn-success mt-2" @click="addDog">Dodaj psa</button></div>
             </div>
             <button type="submit" class="d-block mx-auto mt-3"><img src="/src/assets/save_h.png" width="150" @click="saveChanges"></button>
             </form>
@@ -72,7 +72,6 @@ import NavBarComponent from '@/components/NavBarComponent.vue';
 import ImagePicker from '@/components/ImagePicker.vue';
 import { ref as storageRef, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase/index.js';
-// import VueImagePicker from "vue-image-picker";
 
 
 export default {
@@ -87,8 +86,6 @@ export default {
       favourites: [],
       dogs: []
     })
-    const image = vueRef(null)
-
 
     onMounted(async () => {
 
@@ -152,36 +149,6 @@ export default {
       }
     }
 
-
-
-    // function click1() {
-    //     this.$refs.input1.click()   
-    //     }
-
-    // function previewImage(event) {
-    // this.uploadValue=0;
-    // this.img1=null;
-    // this.imageData = event.target.files[0];
-    // this.onUpload()
-    // }
-
-    // function onUpload(){
-    // this.img1=null;
-    // const storageRef=firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
-    // storageRef.on(`state_changed`,snapshot=>{
-    // this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-    //     }, error=>{console.log(error.message)},
-    // ()=>{this.uploadValue=100;
-    //     storageRef.snapshot.ref.getDownloadURL().then((url)=>{
-    //         this.img1 =url;
-    //         console.log(this.img1)
-    //         });
-    //     }      
-    //     );
-    // }
-
-
-
     return {
       userId,
       profileData,
@@ -190,9 +157,6 @@ export default {
       addPlace,
       removePlace,
       saveChanges,
-    //   click1,
-    //   previewImage,
-    //   onUpload
     }
   }
 }

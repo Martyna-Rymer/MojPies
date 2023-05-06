@@ -71,12 +71,21 @@
             const fbAttendee = await getUserData(userRef)
             await updateDoc(eventRef, {
                 attendees: arrayUnion(userRef)
-            }).then(() => {
+            }).then(async () => {
                 console.log('User added to attendees array');
                 userAttends.value = true;
+                let imageSrc;
+                await getDownloadURL(storageRef(storage, `images/${userId}`))
+                .then((url) => {
+                    imageSrc = url
+                })
+                .catch((error) => {
+                    imageSrc = '/src/assets/profile.png'
+                });
                 attendeesData.value.push({
                 attendeeId: userId,
-                attendeeName: fbAttendee.name
+                attendeeName: fbAttendee.name,
+                attendeeImgSrc: imageSrc
                 });
             }).catch((error) => {
                 console.error(error);

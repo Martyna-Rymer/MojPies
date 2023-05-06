@@ -81,8 +81,8 @@
     .user-avatar {
         margin-top: 7px;
         margin-left: 15px; 
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         object-fit: cover;
         border-radius: 50%;
     }
