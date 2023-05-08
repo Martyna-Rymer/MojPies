@@ -138,7 +138,7 @@
         const eventsCollection = collection(db, 'events');
         await addDoc(eventsCollection, newEvent);
         console.log('Event added successfully');
-        var audio = new Audio('/src/assets/bark.mp3')
+        var audio = new Audio('/public/bark.mp3')
         audio.play();
         this.$router.push('/events');
       }}

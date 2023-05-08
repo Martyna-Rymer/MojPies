@@ -55,7 +55,7 @@
                 imageSrc = url
             })
             .catch((error) => {
-                imageSrc = '/src/assets/profile.png'
+                imageSrc = '/public/profile.png'
             });
 
             const user = { 

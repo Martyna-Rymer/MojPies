@@ -88,7 +88,7 @@
             imageSrc = url
         })
         .catch((error) => {
-            imageSrc = '/src/assets/profile.png'
+            imageSrc = '/public/profile.png'
         });
 
         return {
@@ -105,7 +105,7 @@
             imageSrc = url
         })
         .catch((error) => {
-            imageSrc = '/src/assets/profile.png'
+            imageSrc = '/public/profile.png'
         });
         const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadAuthorImg: imageSrc, threadStartDate: docData.date, answers: await Promise.all(answers) };
         currentThread.value = thread;
@@ -124,7 +124,7 @@
             })
           });
 
-          var audio = new Audio('/src/assets/bark.mp3')
+          var audio = new Audio('/public/bark.mp3')
           audio.play();
 
           threadResponse.value = '';

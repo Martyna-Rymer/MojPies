@@ -84,7 +84,7 @@
                 imageSrc.value = url
             })
             .catch((error) => {
-                imageSrc.value = '/src/assets/profile.png'
+                imageSrc.value = '/public/profile.png'
             });
 
             if (auth.currentUser) {

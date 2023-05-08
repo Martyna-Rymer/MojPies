@@ -132,7 +132,7 @@
                 console.error(error);
               });;
             }
-            var audio = new Audio('/src/assets/bark.mp3')
+            var audio = new Audio('/public/bark.mp3')
               audio.play();
           }
       }

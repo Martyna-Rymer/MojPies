@@ -109,7 +109,7 @@ export default {
             img.setAttribute('src', url);
         })
         .catch((error) => {
-            img.setAttribute('src', '/src/assets/profile.png');
+            img.setAttribute('src', '/public/profile.png');
         });
 
     })

@@ -38,7 +38,7 @@
             imageSrc = url
         })
         .catch((error) => {
-            imageSrc = '/src/assets/profile.png'
+            imageSrc = '/public/profile.png'
         });
         return {
             attendeeId: ref.id,
@@ -80,7 +80,7 @@
                     imageSrc = url
                 })
                 .catch((error) => {
-                    imageSrc = '/src/assets/profile.png'
+                    imageSrc = '/public/profile.png'
                 });
                 attendeesData.value.push({
                 attendeeId: userId,
@@ -101,14 +101,14 @@
                 console.error(error);
             });
             }
-            var audio = new Audio('/src/assets/bark.mp3');
+            var audio = new Audio('/public/bark.mp3');
             audio.play();
         }
         }
 
   
       const attendButtonSrc = computed(() => {
-        return userAttends.value ? '/src/assets/leave.png' : '/src/assets/join.png';
+        return userAttends.value ? '/public/leave.png' : '/public/join.png';
       });
 
     async function getUserData (userRef)  {
