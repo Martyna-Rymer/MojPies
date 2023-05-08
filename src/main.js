@@ -28,7 +28,7 @@ if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
       navigator.serviceWorker
       navigator.serviceWorker.register (
-        '/MojPies/serviceWorker.js',
+        '/MojPies/sw.js',
         {scope: '/MojPies/'}
       )
         .then(res => console.log("service worker registered"))
