@@ -10,12 +10,12 @@
     "display": "standalone",
     "icons": [
       {
-        "src": "assets/lapa.png",
+        "src": "/assets/lapa.png",
         "sizes": "512x512",
         "type": "image/png"
       },
       {
-        "src": "assets/lapa_small.png",
+        "src": "/assets/lapa_small.png",
         "sizes": "192x192",
         "type": "image/png"
       }
