@@ -1,5 +1,5 @@
 <template>
-    <img src="/src/assets/banner.png" alt="Banner" class="banner-image">
+    <img src="/src/assets/banner.png" alt="Banner" class="banner-image mb-3">
 
     <h1>Zaloguj się do swojego konta</h1>
     <p><input type="text" placeholder="Email" v-model="email" /></p>

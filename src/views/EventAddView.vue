@@ -28,11 +28,11 @@
             </div>
         </div>
         </div>
-      </div>
-      <div class="mt-3">
-        <img src="/src/assets/add_h.png" width="150" v-on:click="addEvent" />
-      </div>
-    </div> 
+        <div class="mt-3">
+          <img src="/src/assets/add_h.png" width="150" v-on:click="addEvent" />
+        </div>
+      </div> 
+    </div>
     <NavBarComponent />
 </template> 
 

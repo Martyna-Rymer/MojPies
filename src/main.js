@@ -23,7 +23,6 @@ app.component(VueDatePicker)
 app.mount('#app')
 
 if ("serviceWorker" in navigator) {
-  console.log('tuuuuuu')
     window.addEventListener("load", function() {
       navigator.serviceWorker
       navigator.serviceWorker.register (
