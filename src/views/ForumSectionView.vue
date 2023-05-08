@@ -82,7 +82,7 @@
                     imageSrc = url
                 })
                 .catch((error) => {
-                    imageSrc = '/public/profile.png'
+                    imageSrc = '/MojPies/profile.png'
                 });
 
                 return { id: doc.id, date: data.date, ...data, authorData: authorData, imageSrc: imageSrc};

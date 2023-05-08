@@ -1,1 +1,1 @@
-{"name":"mojpies","short_name":"mojpies","start_url":"/MojPies/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/MojPies/"}
+{"name":"mojpies","short_name":"mojpies","start_url":"/MojPies/index.html","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/MojPies/","theme_color":"#83A6FF","icons":[{"src":"./lapa_medium.png","sizes":"192x192","type":"image/png"},{"src":"./lapa.png","sizes":"192x192","type":"image/png"}],"purpose":"any"}

@@ -51,7 +51,7 @@
               const collectionRef = collection(db, path);
               await addDoc(collectionRef, topic);
 
-              var audio = new Audio('/public/bark.mp3')
+              var audio = new Audio('/MojPies/bark.mp3')
               audio.play();
 
               newTopic.value.topic = '';

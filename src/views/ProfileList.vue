@@ -55,7 +55,7 @@
                 imageSrc = url
             })
             .catch((error) => {
-                imageSrc = '/public/profile.png'
+                imageSrc = '/MojPies/profile.png'
             });
 
             const user = { 

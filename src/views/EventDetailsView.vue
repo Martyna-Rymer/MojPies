@@ -1,7 +1,7 @@
 <template>
     <div class="event-details-container" style="margin-bottom: 50px;" v-if="currentEvent">
         <div class="top-container d-flex justify-content-center align-items-center flex-column">
-            <img :src="currentEvent.type === 'Spacer' ? '/public/dogWalk.png' : '/public/dogTraining.png'" class="img-fluid" style="max-width: 70%;">
+            <img :src="currentEvent.type === 'Spacer' ? '/MojPies/dogWalk.png' : '/MojPies/dogTraining.png'" class="img-fluid" style="max-width: 70%;">
             <h3 class="mt-3 text-center">{{ currentEvent.type }}</h3>
         </div>
         <div class="details-container me-3">
