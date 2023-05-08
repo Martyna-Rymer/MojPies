@@ -4,7 +4,7 @@
     "description": "Aplikacja spolecznosciowa dla wlascicieli psow",
     "scope": "https://martyna-rymer.github.io/MojPies/",
     
-    "start_url": "/",
+    "start_url": "https://martyna-rymer.github.io/MojPies/",
     "background_color": "#ffffff",
     "theme_color": "#83A6FF",
     "display": "standalone",
