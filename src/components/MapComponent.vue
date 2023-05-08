@@ -1,7 +1,7 @@
 <template>
   <div id="mapa">
       <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9998">
-        <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
+        <img src="/public/marker.png" alt="Custom Icon" class="marker">
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@
     const marker = L.marker(this.geolocation)
 
     var customIconLayer = L.layerGroup(marker, {icon: L.icon({
-        iconUrl: '/src/assets/marker.png',
+        iconUrl: '/public/marker.png',
         iconSize: [5, 5],
         iconAnchor: [25, 25]
     })});
