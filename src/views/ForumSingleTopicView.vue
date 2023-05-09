@@ -133,8 +133,9 @@
           audio.play();
 
           threadResponse.value = '';
-          // router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } })
-          router.back
+          console.log(sectionKey)
+          router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } })
+          // router.back
           // window.location.reload();
         }
       }

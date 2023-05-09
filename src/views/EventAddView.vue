@@ -23,7 +23,7 @@
         <div class="map-wrapper">
             <div id="map">
                 <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9998">
-                    <img src="/public/marker.png" alt="Custom Icon" class="marker">
+                    <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@
         
 
         var customIconLayer = L.layerGroup(marker, {icon: L.icon({
-            iconUrl: '/MojPies/marker.png',
+            iconUrl: '/src/asstes/marker.png',
             iconSize: [5, 5],
             iconAnchor: [25, 25]
         })});
@@ -162,7 +162,6 @@
         position: absolute; 
         margin-top: -96px; 
         margin-left: -38px;
-        z-index: 99999;
     }
     .chip-container {
         display: flex;
