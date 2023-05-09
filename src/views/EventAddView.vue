@@ -162,6 +162,7 @@
         position: absolute; 
         margin-top: -96px; 
         margin-left: -38px;
+        z-index: 99999;
     }
     .chip-container {
         display: flex;

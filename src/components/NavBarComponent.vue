@@ -21,7 +21,7 @@
 
   <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
     <div class="justify-content-center" id="navbarNav">
-          <router-link :to="{ name: 'profile', params: { userId: currentUserId } }" class="nav-link" active-class="active-link">
+        <router-link :to="{ name: 'profile', params: { userId: currentUserId } }" class="nav-link" active-class="active-link">
           <img class="mobile-only" src="/src/assets/profil_w.png" width="50" height="50">
           <span class="desktop-only">Profil</span>
         </router-link>
