@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
     import { ref } from 'vue';
     import { auth } from '@/firebase';
     import { RouterLink } from 'vue-router'
@@ -14,6 +14,25 @@
         return { currentUserId};
         }
     }
+</script> -->
+
+<script setup>
+    import { ref } from 'vue';
+    import { auth } from '@/firebase';
+    import { RouterLink } from 'vue-router'
+
+    // export default {
+    //     setup() {
+      const currentUserId = await auth.currentUser.id
+        // const currentUserId = ref(null);
+        // const user = auth.currentUser;
+        // if (user) {
+        //     currentUserId.value = user.uid;
+        // }
+        // console.log(currentUserId.value);
+        // return { currentUserId};
+        // }
+    // }
 </script>
 
 
@@ -21,10 +40,11 @@
 
   <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
     <div class="justify-content-center" id="navbarNav">
+      <Suspense>
         <router-link :to="{ name: 'profile', params: { userId: currentUserId } }" class="nav-link" active-class="active-link">
           <img class="mobile-only" src="/src/assets/profil_w.png" width="50" height="50">
           <span class="desktop-only">Profil</span>
-        </router-link>
+        </router-link></Suspense>
         <router-link to="/profiles" class="nav-link" active-class="active-link">
           <img class="mobile-only" src="/src/assets/users_w.png" width="50" height="50">
           <span class="desktop-only">Użytkownicy</span>
