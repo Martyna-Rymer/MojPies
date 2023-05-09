@@ -48,6 +48,7 @@
   import { db, auth, storage } from '@/firebase/index.js';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
   import NavBarComponent from '@/components/NavBarComponent.vue';
+  import router from "../router";
   
 
   export default {
@@ -128,6 +129,7 @@
           audio.play();
 
           threadResponse.value = '';
+          router.push({ name: 'forumThread', params: { sectionKey: route.params.sectionKey, threadId: route.params.threadId } })
           window.location.reload();
         }
       }
