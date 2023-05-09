@@ -149,7 +149,7 @@
         let authorDoc = await getDoc(userRef);
 
           threadAnswers.value.push({
-            date: new Date(),
+            date: Date.parse(new Date()),
           answer: threadResponse.value,
           authorName: authorDoc.name,
           authorId: userId,
