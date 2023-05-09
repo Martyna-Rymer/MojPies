@@ -49,7 +49,7 @@
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
   import NavBarComponent from '@/components/NavBarComponent.vue';
   // import router from "../router";
-  // import { getCurrentInstance } from 'vue';
+  import { getCurrentInstance } from 'vue';
   
 
   export default {
@@ -136,9 +136,8 @@
           threadResponse.value = '';
           console.log(sectionKey)
 
-  //         const instance = getCurrentInstance();
-  // instance.proxy.forceUpdate();
-  this.$forceUpdate();
+          const instance = getCurrentInstance();
+  instance.proxy.forceUpdate();
           // setTimeout(() => {
           //   console.log('before router');
           //   router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
