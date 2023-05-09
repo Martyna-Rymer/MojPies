@@ -48,7 +48,8 @@
   import { db, auth, storage } from '@/firebase/index.js';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
   import NavBarComponent from '@/components/NavBarComponent.vue';
-  import router from "../router";
+  // import router from "../router";
+  // import { getCurrentInstance } from 'vue';
   
 
   export default {
@@ -134,10 +135,14 @@
 
           threadResponse.value = '';
           console.log(sectionKey)
-          setTimeout(() => {
-            console.log('before router');
-            router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
-          }, 5000);
+
+  //         const instance = getCurrentInstance();
+  // instance.proxy.forceUpdate();
+  this.$forceUpdate();
+          // setTimeout(() => {
+          //   console.log('before router');
+          //   router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
+          // }, 5000);
 
           
           // router.back
