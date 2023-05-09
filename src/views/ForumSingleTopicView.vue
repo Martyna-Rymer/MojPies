@@ -135,8 +135,9 @@
           threadResponse.value = '';
           console.log(sectionKey)
           setTimeout(() => {
+            console.log('before router');
             router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
-          }, 3000);
+          }, 5000);
 
           
           // router.back
