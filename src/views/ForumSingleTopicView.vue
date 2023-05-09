@@ -134,7 +134,11 @@
 
           threadResponse.value = '';
           console.log(sectionKey)
-          router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } })
+          setTimeout(() => {
+            router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
+          }, 3000);
+
+          
           // router.back
           // window.location.reload();
         }
