@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentThread" class="container">
+  <div v-if="currentThread" class="container"  :key="uniqueKey">
     <div class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <h5 class="card-title">{{ currentThread.threadTopic }}</h5>
@@ -60,6 +60,7 @@
       const path = ref();
       const sectionKey = ref();
       const threadId = ref();
+      const uniqueKey = 0;
 
       const formatDate = (timestamp) => {
         const date = new Date(timestamp.toMillis());
@@ -135,13 +136,14 @@
 
           threadResponse.value = '';
           console.log(sectionKey)
+          this.uniqueKey += 1; 
 
   //         const instance = getCurrentInstance();
   // instance.proxy.forceUpdate();
           // setTimeout(() => {
           //   console.log('before router');
-          window.location.reload();
-            router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
+          // window.location.reload();
+          //   router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
           // }, 5000);
 
           
@@ -163,7 +165,8 @@
         submitThreadResponse,
         path,
         sectionKey,
-        threadId
+        threadId,
+        uniqueKey,
       }
     }
   }
