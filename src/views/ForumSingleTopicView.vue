@@ -146,7 +146,7 @@
             imageSrc = '/MojPies/profile.png'
         });
           
-        let authorDoc = await getDoc(authorRef);
+        let authorDoc = await getDoc(userRef);
 
           threadAnswers.value.push({
             date: new Date(),
