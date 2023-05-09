@@ -134,7 +134,7 @@
 
           threadResponse.value = '';
           router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } })
-          window.location.reload();
+          // window.location.reload();
         }
       }
 
