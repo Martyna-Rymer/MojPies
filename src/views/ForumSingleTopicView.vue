@@ -136,11 +136,12 @@
           threadResponse.value = '';
           console.log(sectionKey)
 
-          const instance = getCurrentInstance();
-  instance.proxy.forceUpdate();
+  //         const instance = getCurrentInstance();
+  // instance.proxy.forceUpdate();
           // setTimeout(() => {
           //   console.log('before router');
-          //   router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
+          window.location.reload();
+            router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
           // }, 5000);
 
           
