@@ -60,7 +60,7 @@
       const path = ref();
       const sectionKey = ref();
       const threadId = ref();
-      const uniqueKey = 0;
+      const uniqueKey = ref(0);
 
       const formatDate = (timestamp) => {
         const date = new Date(timestamp.toMillis());
@@ -136,7 +136,7 @@
 
           threadResponse.value = '';
           console.log(sectionKey)
-          this.uniqueKey += 1; 
+          uniqueKey.value += 1; 
 
   //         const instance = getCurrentInstance();
   // instance.proxy.forceUpdate();
