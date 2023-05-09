@@ -14,7 +14,8 @@
       </div>
     </div>
 
-    <div v-for="item in currentThread.answers" class="card mb-3" style="width: 100%;">
+    <!-- <div v-for="item in currentThread.answers" class="card mb-3" style="width: 100%;"> -->
+      <div v-for="item in threadAnswers" class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <p class="card-text">{{ item.answer }}</p>
         <p class="card-text">
@@ -58,9 +59,10 @@
       const threadResponse = ref('');
       const currentThread = ref();
       const path = ref();
-      const sectionKey = ref();
-      const threadId = ref();
-      const uniqueKey = ref(0);
+      const threadAnswers = ref([])
+      // const sectionKey = ref();
+      // const threadId = ref();
+      // const uniqueKey = ref(0);
 
       const formatDate = (timestamp) => {
         const date = new Date(timestamp.toMillis());
@@ -81,8 +83,8 @@
       onMounted(async () => {
         const route = useRoute();
         path.value = `forum/${route.params.sectionKey}/threads/${route.params.threadId}`;
-        sectionKey.value = route.params.sectionKey;
-        threadId.value = route.params.threadId;
+        // sectionKey.value = route.params.sectionKey;
+        // threadId.value = route.params.threadId;
         let imageSrc;
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
@@ -116,6 +118,7 @@
         });
         const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadAuthorImg: imageSrc, threadStartDate: docData.date, answers: await Promise.all(answers) };
         currentThread.value = thread;
+        threadAnswers.value = await Promise.all(answers);
       });
 
       const updateThread = async () => {
@@ -134,9 +137,28 @@
           var audio = new Audio('/MojPies/bark.mp3')
           audio.play();
 
+          let imageSrc;
+          await getDownloadURL(storageRef(storage, `images/${userId}`))
+        .then((url) => {
+            imageSrc = url
+        })
+        .catch((error) => {
+            imageSrc = '/MojPies/profile.png'
+        });
+          
+        let authorDoc = await getDoc(authorRef);
+
+          threadAnswers.value.push({
+            date: new Date(),
+          answer: threadResponse.value,
+          authorName: authorDoc.name,
+          authorId: userId,
+          imageSrc: imageSrc}
+
+          )
           threadResponse.value = '';
-          console.log(sectionKey)
-          uniqueKey.value += 1; 
+          // console.log(sectionKey)
+          // uniqueKey.value += 1; 
 
   //         const instance = getCurrentInstance();
   // instance.proxy.forceUpdate();
@@ -164,9 +186,10 @@
         threadResponse,
         submitThreadResponse,
         path,
-        sectionKey,
-        threadId,
-        uniqueKey,
+        threadAnswers
+        // sectionKey,
+        // threadId,
+        // uniqueKey,
       }
     }
   }
