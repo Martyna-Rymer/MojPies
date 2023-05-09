@@ -57,6 +57,8 @@
       const threadResponse = ref('');
       const currentThread = ref();
       const path = ref();
+      const sectionKey = ref();
+      const threadId = ref();
 
       const formatDate = (timestamp) => {
         const date = new Date(timestamp.toMillis());
@@ -77,6 +79,8 @@
       onMounted(async () => {
         const route = useRoute();
         path.value = `forum/${route.params.sectionKey}/threads/${route.params.threadId}`;
+        sectionKey.value = route.params.sectionKey;
+        threadId.value = route.params.threadId;
         let imageSrc;
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
@@ -129,7 +133,7 @@
           audio.play();
 
           threadResponse.value = '';
-          router.push({ name: 'forumThread', params: { sectionKey: route.params.sectionKey, threadId: route.params.threadId } })
+          router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } })
           window.location.reload();
         }
       }
@@ -145,7 +149,9 @@
         formatDate,
         threadResponse,
         submitThreadResponse,
-        path
+        path,
+        sectionKey,
+        threadId
       }
     }
   }
