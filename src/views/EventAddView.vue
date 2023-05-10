@@ -187,10 +187,12 @@
         width: 100%;
         border: 1px solid green;
         height: 350px;
+        display: flex;
     }
     #map {
         width: 100%;
         height: 350px;
+        z-index: 1000;
     }
 </style>
   

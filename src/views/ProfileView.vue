@@ -22,7 +22,7 @@
             </div>
             <div v-if="profileData.description">
               <p class="small text-muted mt-4 mb-1">Opis</p>
-              <h5>{{ profileData.description }}</h5>
+              <h5 class="word-wrap">{{ profileData.description }}</h5>
             </div>
             <div v-if="profileData.dogs.length > 0">
                 <p class="small text-muted mt-4 mb-1">Psy:</p>
