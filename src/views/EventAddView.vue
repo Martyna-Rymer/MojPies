@@ -23,7 +23,7 @@
         <div class="map-wrapper">
             <div id="map">
                 <!-- <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 999"> -->
-                  <div id="custom-icon" style="position: top: 50%; left: 50%; absolute; transform: translate(-50%, -100%); z-index: 999">
+                  <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; absolute; transform: translate(-50%, -100%); z-index: 999">
                    
                   <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
                   </div>
