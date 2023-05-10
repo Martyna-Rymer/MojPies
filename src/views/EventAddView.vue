@@ -22,8 +22,10 @@
           <input type="text" class="form-control mb-3" v-model="eventLocation" required>
         <div class="map-wrapper">
             <div id="map">
-                <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 999">
-                    <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
+                <!-- <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 999"> -->
+                  <div id="custom-icon" style="position: top: 50%; left: 50%; absolute; transform: translate(-50%, -100%); z-index: 999">
+                   
+                  <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
                   </div>
             </div>
         </div>
@@ -158,11 +160,11 @@
         height: auto;
         object-fit: cover;
     }
-    /* .marker {
-        position: absolute; 
-        margin-top: -96px; 
-        margin-left: -38px;
-    } */
+    /* #custom-icon { */
+        /* position: absolute;  */
+        /* margin-top: -96px; 
+        margin-left: -38px; */
+    /* } */
     .chip-container {
         display: flex;
         justify-content: left;
@@ -191,7 +193,7 @@
     }
     #map {
         width: 100%;
-        height: 350px;
+        /* height: 350px; */
         z-index: 1;
     }
 </style>
