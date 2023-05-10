@@ -1,63 +1,60 @@
 <template>
-    <div class="container ml-2 me-2" style="margin-bottom: 70px;">
-        <div v-if="profileData">
-            <div class="text-center">
-                <img id="profile-image" class="card-img-top user-avatar rounded-circle mb-3">
-            </div>
-            <div><ImagePicker :user-id="userId" /></div>
-            <form @submit.prevent="saveChanges">
-            <div class="form-group">
-                <label for="profileData.userName">Nazwa użytkownika</label>
-                <input type="text" class="form-control" id="name" v-model="profileData.name" required>
-            </div>
-            <div class="form-group">
-                <label for="profileData.city">Miejscowość</label>
-                <input type="text" class="form-control" id="city" v-model="profileData.city">
-            </div>
-            <div class="form-group">
-                <label for="profileData.description">Opis</label>
-                <textarea class="form-control" id="description" rows="3" v-model="profileData.description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="profileData.favourite-places">Ulubione miejsca na wyjścia z psem</label>
+  <div class="container ml-2 me-2" style="margin-bottom: 70px;">
+      <div v-if="profileData">
+          <ImagePicker />
+          <form @submit.prevent="saveChanges">
+          <div class="form-group">
+              <label for="profileData.userName">Nazwa użytkownika</label>
+              <input type="text" class="form-control" id="name" v-model="profileData.name" required>
+          </div>
+          <div class="form-group">
+              <label for="profileData.city">Miejscowość</label>
+              <input type="text" class="form-control" id="city" v-model="profileData.city">
+          </div>
+          <div class="form-group">
+              <label for="profileData.description">Opis</label>
+              <textarea class="form-control" id="description" rows="3" v-model="profileData.description"></textarea>
+          </div>
+          <div class="form-group">
+              <label for="profileData.favourite-places">Ulubione miejsca na wyjścia z psem</label>
 
-                <div v-for="(loc, index) in profileData.favourites" :key="index">
-                <div class="form-row">
-                    <div class="col">
-                    <input type="text" class="form-control" v-model="profileData.favourites[index]">
-                    </div>
-                    <div class="col-auto">
-                    <button type="button" class="btn btn-danger" @click="removePlace(index)">Usuń</button>
-                    </div>
-                </div>
-                </div>
-                <div><button type="button" class="btn btn-success mt-2" @click="addPlace">Dodaj miejsce</button></div>
-            </div>
-            <div class="form-group">
-                <label for="dogs">Psy</label>
-                <div v-for="(dog, index) in profileData.dogs" :key="index">
-                <div class="form-row">
-                    <div class="col">
-                    <input type="text" class="form-control" placeholder="Imię" v-model="dog.name">
-                    </div>
-                    <div class="col">
-                    <input type="text" class="form-control" placeholder="Rok urodzenia" v-model="dog.yearOfBirth">
-                    </div>
-                    <div class="col">
-                    <input type="text" class="form-control" placeholder="Rasa" v-model="dog.race">
-                    </div>
-                    <div class="col-auto">
-                    <button type="button" class="btn btn-danger" @click="removeDog(index)">Usuń</button>
-                    </div>
-                </div>
-                </div>
-                <div><button type="button" class="btn btn-success mt-2" @click="addDog">Dodaj psa</button></div>
-            </div>
-            <button type="submit" class="d-block mx-auto mt-3"><img src="/src/assets/save_h.png" width="150" @click="saveChanges"></button>
-            </form>
-        </div>
-    </div>
-    <NavBarComponent />
+              <div v-for="(loc, index) in profileData.favourites" :key="index">
+              <div class="form-row">
+                  <div class="col">
+                  <input type="text" class="form-control" v-model="profileData.favourites[index]">
+                  </div>
+                  <div class="col-auto">
+                  <button type="button" class="btn btn-danger" @click="removePlace(index)">Usuń</button>
+                  </div>
+              </div>
+              </div>
+              <div><button type="button" class="btn btn-success mt-2" @click="addPlace">Dodaj miejsce</button></div>
+          </div>
+          <div class="form-group">
+              <label for="dogs">Psy</label>
+              <div v-for="(dog, index) in profileData.dogs" :key="index">
+              <div class="form-row">
+                  <div class="col">
+                  <input type="text" class="form-control" placeholder="Imię" v-model="dog.name">
+                  </div>
+                  <div class="col">
+                  <input type="text" class="form-control" placeholder="Rok urodzenia" v-model="dog.yearOfBirth">
+                  </div>
+                  <div class="col">
+                  <input type="text" class="form-control" placeholder="Rasa" v-model="dog.race">
+                  </div>
+                  <div class="col-auto">
+                  <button type="button" class="btn btn-danger" @click="removeDog(index)">Usuń</button>
+                  </div>
+              </div>
+              </div>
+              <div><button type="button" class="btn btn-success mt-2" @click="addDog">Dodaj psa</button></div>
+          </div>
+          <button type="submit" class="d-block mx-auto mt-3"><img src="/src/assets/save_h.png" width="150" @click="saveChanges"></button>
+          </form>
+      </div>
+  </div>
+  <NavBarComponent />
 </template>
 
 
@@ -70,14 +67,13 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import router from '../router';
 import NavBarComponent from '@/components/NavBarComponent.vue';
 import ImagePicker from '@/components/ImagePicker.vue';
-import { ref as storageRef, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/firebase/index.js';
 
 
 export default {
   components: { NavBarComponent, ImagePicker },
   setup() {
     const userId = vueRef()
+    const initialUrl = vueRef()
     const profileData = reactive({
       id: null,
       name: '',
@@ -102,16 +98,6 @@ export default {
         profileData.description = docData.description
         profileData.favourites = docData.favourites || []
         profileData.dogs = docData.dogs || []
-
-        const img = document.getElementById('profile-image');
-        getDownloadURL(storageRef(storage, `images/${route.params.userId}`))
-        .then((url) => {
-            img.setAttribute('src', url);
-        })
-        .catch((error) => {
-            img.setAttribute('src', '/MojPies/profile.png');
-        });
-
     })
 
     const addDog = () => {
@@ -151,6 +137,7 @@ export default {
 
     return {
       userId,
+      initialUrl,
       profileData,
       addDog,
       removeDog,
@@ -162,10 +149,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-    .user-avatar {
-        width: 220px; 
-        height: 200px;
-    }
-</style>

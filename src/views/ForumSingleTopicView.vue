@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentThread" class="container"  :key="uniqueKey">
+  <div v-if="currentThread" class="container">
     <div class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <h5 class="card-title">{{ currentThread.threadTopic }}</h5>
@@ -14,7 +14,6 @@
       </div>
     </div>
 
-    <!-- <div v-for="item in currentThread.answers" class="card mb-3" style="width: 100%;"> -->
       <div v-for="item in threadAnswers" class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <p class="card-text">{{ item.answer }}</p>
@@ -42,15 +41,13 @@
 
 <script>
   
-  // import { db, auth } from '@/firebase';
   import { useRoute } from 'vue-router'
   import { ref, onMounted } from 'vue';
   import { ref as storageRef, getDownloadURL } from 'firebase/storage';
   import { db, auth, storage } from '@/firebase/index.js';
   import { getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+  import { Timestamp } from "@firebase/firestore";
   import NavBarComponent from '@/components/NavBarComponent.vue';
-  // import router from "../router";
-  import { getCurrentInstance } from 'vue';
   
 
   export default {
@@ -60,9 +57,6 @@
       const currentThread = ref();
       const path = ref();
       const threadAnswers = ref([])
-      // const sectionKey = ref();
-      // const threadId = ref();
-      // const uniqueKey = ref(0);
 
       const formatDate = (timestamp) => {
         const date = new Date(timestamp.toMillis());
@@ -83,8 +77,6 @@
       onMounted(async () => {
         const route = useRoute();
         path.value = `forum/${route.params.sectionKey}/threads/${route.params.threadId}`;
-        // sectionKey.value = route.params.sectionKey;
-        // threadId.value = route.params.threadId;
         let imageSrc;
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
@@ -108,6 +100,7 @@
           imageSrc: imageSrc
         };
         }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
         const threadAuthorData = await getAuthorData(docData.authorRef);
         await getDownloadURL(storageRef(storage, `images/${threadAuthorData.id}`))
         .then((url) => {
@@ -116,7 +109,8 @@
         .catch((error) => {
             imageSrc = '/MojPies/profile.png'
         });
-        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadAuthorImg: imageSrc, threadStartDate: docData.date, answers: await Promise.all(answers) };
+
+        const thread = { id: snap.id, threadTopic: docData.topic, threadDescription: docData.description, threadAuthor: threadAuthorData, threadAuthorImg: imageSrc, threadStartDate: docData.date };
         currentThread.value = thread;
         threadAnswers.value = await Promise.all(answers);
       });
@@ -149,28 +143,14 @@
         let authorDoc = await getDoc(userRef);
 
           threadAnswers.value.push({
-            date: Date.parse(new Date()),
+            date: Timestamp.fromDate(new Date()),
           answer: threadResponse.value,
-          authorName: authorDoc.name,
+          authorName: authorDoc.data().name,
           authorId: userId,
           imageSrc: imageSrc}
 
           )
           threadResponse.value = '';
-          // console.log(sectionKey)
-          // uniqueKey.value += 1; 
-
-  //         const instance = getCurrentInstance();
-  // instance.proxy.forceUpdate();
-          // setTimeout(() => {
-          //   console.log('before router');
-          // window.location.reload();
-          //   router.push({ name: 'forumThread', params: { sectionKey: sectionKey, threadId: threadId } });
-          // }, 5000);
-
-          
-          // router.back
-          // window.location.reload();
         }
       }
 
@@ -187,9 +167,6 @@
         submitThreadResponse,
         path,
         threadAnswers
-        // sectionKey,
-        // threadId,
-        // uniqueKey,
       }
     }
   }
