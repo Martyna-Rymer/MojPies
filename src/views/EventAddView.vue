@@ -22,9 +22,9 @@
           <input type="text" class="form-control mb-3" v-model="eventLocation" required>
         <div class="map-wrapper">
             <div id="map">
-                <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9998">
+                <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 999">
                     <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
-                </div>
+                  </div>
             </div>
         </div>
         </div>
@@ -72,31 +72,31 @@
         }).addTo(map);
 
 
-        const marker = L.marker([50.06143, 19.93658]);
+        // const marker = L.marker([50.06143, 19.93658]);
 
-        state.marker = marker;
-        state.markerCreated = true;
+        // state.marker = marker;
+        // state.markerCreated = true;
         
 
-        var customIconLayer = L.layerGroup(marker, {icon: L.icon({
-            iconUrl: '/src/asstes/marker.png',
-            iconSize: [5, 5],
-            iconAnchor: [25, 25]
-        })});
+        // var customIconLayer = L.layerGroup(marker, {icon: L.icon({
+        //     iconUrl: '/src/asstes/marker.png',
+        //     iconSize: [5, 5],
+        //     iconAnchor: [25, 25]
+        // })});
 
 
         navigator.geolocation.getCurrentPosition(position => {
             try {
                 const { latitude, longitude } = position.coords;
                 map.setView([latitude, longitude], 14);
-                marker.setLatLng([latitude, longitude]);
+                // marker.setLatLng([latitude, longitude]);
             }
             catch {
                 console.log('Not able to get current position')
             }
         });
 
-        customIconLayer.addTo(map);
+        // customIconLayer.addTo(map);
 
         map.on('moveend', function(e) {
             const center = map.getCenter();
@@ -121,9 +121,9 @@
     methods: {
       async addEvent() {
         if (!this.eventLocation || !this.eventDate) {
-        alert('Please fill in all required fields');
-        return;
-      }
+          alert('Proszę uzupełnić wszystkie pola');
+          return;
+        }
     if (auth.currentUser) {
         const userId = auth.currentUser.uid;
         const userRef = doc(db, 'users', userId);
@@ -158,11 +158,11 @@
         height: auto;
         object-fit: cover;
     }
-    .marker {
+    /* .marker {
         position: absolute; 
         margin-top: -96px; 
         margin-left: -38px;
-    }
+    } */
     .chip-container {
         display: flex;
         justify-content: left;
@@ -192,7 +192,7 @@
     #map {
         width: 100%;
         height: 350px;
-        z-index: 1000;
+        z-index: 1;
     }
 </style>
   

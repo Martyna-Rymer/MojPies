@@ -9,13 +9,7 @@ const router = createRouter({
       name: 'starting',
       component: () => import('../views/StartingPage.vue')
     },
-    {
-      path: '/home',
-      name: 'home',
-      component: () => import('../views/HomePage.vue'),
-      meta: {
-    },
-    },
+
     {
       path: '/editprofile:userId',
       name: 'editprofile',

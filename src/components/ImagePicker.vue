@@ -4,6 +4,7 @@
                 <img id="profile-image" class="card-img-top user-avatar rounded-circle mb-3">
             </div>
         <input type="file" @change="onFileSelected">
+
         <button v-if="file" @click="uploadFile">Zapisz zdjęcie</button>
     </div>
   </template>
@@ -13,7 +14,6 @@
     import { auth, storage } from '@/firebase/index.js';
     import { ref, onMounted } from 'vue';
   
-
 
     export default {
     setup() {
@@ -40,11 +40,9 @@
     },
     methods: {
       onFileSelected: function(event) {
-        console.log('onselected')
         this.file = event.target.files[0]
         console.log(this.file)
         let imageUrl = URL.createObjectURL(this.file);
-        console.log('initial', imageUrl);
         const img = document.getElementById('profile-image');
         img.setAttribute('src', imageUrl);
       },

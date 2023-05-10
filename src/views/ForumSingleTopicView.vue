@@ -14,7 +14,7 @@
       </div>
     </div>
 
-      <div v-for="item in threadAnswers" class="card mb-3" style="width: 100%;">
+    <div v-for="item in threadAnswers" class="card mb-3" style="width: 100%;">
       <div class="card-body">
         <p class="card-text">{{ item.answer }}</p>
         <p class="card-text">
@@ -80,26 +80,27 @@
         let imageSrc;
         const snap = await getDoc(doc(db, `forum/${route.params.sectionKey}/threads/${route.params.threadId}`));
         const docData = snap.data();
+
+
         const answers = docData.answers.map(async (answer) => {
-        const authorData = await getAuthorData(answer.author);
-
-        
-        await getDownloadURL(storageRef(storage, `images/${authorData.id}`))
-        .then((url) => {
-            imageSrc = url
-        })
-        .catch((error) => {
-            imageSrc = '/MojPies/profile.png'
-        });
-
-        return {
-          date: answer.date,
-          answer: answer.answer,
-          authorName: authorData.name,
-          authorId: authorData.id,
-          imageSrc: imageSrc
-        };
+          const authorData = await getAuthorData(answer.author);
+          await getDownloadURL(storageRef(storage, `images/${authorData.id}`))
+          .then((url) => {
+              imageSrc = url
+          })
+          .catch((error) => {
+              imageSrc = '/MojPies/profile.png'
+          });
+          return {
+            date: answer.date,
+            answer: answer.answer,
+            authorName: authorData.name,
+            authorId: authorData.id,
+            imageSrc: imageSrc
+          };
         }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+
 
         const threadAuthorData = await getAuthorData(docData.authorRef);
         await getDownloadURL(storageRef(storage, `images/${threadAuthorData.id}`))
