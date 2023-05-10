@@ -1,6 +1,6 @@
 <template>
   <div id="mapa">
-      <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 999">
+      <div id="custom-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); z-index: 999">
         <img src="/src/assets/marker.png" alt="Custom Icon" class="marker">
     </div>
   </div>
