@@ -21,6 +21,11 @@ h5.word-wrap {
   transform: translate3d(0px);
 }
 
+.leaflet-container {
+  max-height: none;
+  max-width: none;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);

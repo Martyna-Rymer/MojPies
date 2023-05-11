@@ -17,21 +17,13 @@
     mounted () {
       const map = L.map("mapa", {
         dragging: false,
-        scrollWheelZoom: false,
         touchZoom: false
-      }).setView(this.geolocation, 14);
-
+      })
+      
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
       }).addTo(map);
 
-    // const marker = L.marker(this.geolocation)
-
-    // var customIconLayer = L.layerGroup(marker, {icon: L.icon({
-    //     iconUrl: '/src/assets/marker.png',
-    //     iconSize: [5, 5],
-    //     iconAnchor: [25, 25]
-    // })});
-    // customIconLayer.addTo(map);
+      map.setView(this.geolocation, 14);
   }}
 </script>

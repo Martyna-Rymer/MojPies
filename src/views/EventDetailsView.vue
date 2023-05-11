@@ -41,6 +41,7 @@ export default {
         const docData = snap.data();
         const event = { id: snap.id, type: docData.type, description: docData.description, location: docData.location, date: docData.date, geolocation: docData.geolocation};
         currentEvent.value = event;
+
     });
 
     function formatDate(timestamp) {
@@ -63,12 +64,13 @@ export default {
 
 <style>
     .map-wrapper {
-        width: 100%;
+        width: 350px;
         border: 1px solid green;
         height: 350px;
     }
     #mapa {
         width: 100%;
         height: 350px;
+        height: 100%;
     }
 </style>

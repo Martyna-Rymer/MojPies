@@ -16,45 +16,45 @@
   
 
     export default {
-    setup() {
-    const userId = ref()
-    const file = ref()
+      setup() {
+        const userId = ref()
+        const file = ref()
 
 
-    onMounted(async () => {
-        if (auth.currentUser) {
-            userId.value = auth.currentUser.uid
-            const img = document.getElementById('profile-image');
-            getDownloadURL(storageRef(storage, `images/${auth.currentUser.uid}`))
-            .then((url) => {
-                img.setAttribute('src', url);
-            })
-            .catch((error) => {
-                img.setAttribute('src', '/public/profile.png');
-            });
-        }
+        onMounted(async () => {
+            if (auth.currentUser) {
+                userId.value = auth.currentUser.uid
+                const img = document.getElementById('profile-image');
+                getDownloadURL(storageRef(storage, `images/${auth.currentUser.uid}`))
+                .then((url) => {
+                    img.setAttribute('src', url);
+                })
+                .catch((error) => {
+                    img.setAttribute('src', '/public/profile.png');
+                });
+            }
 
-    })
-    return {file, userId}
+        })
+        return {file, userId}
 
-    },
-    methods: {
-      onFileSelected: function(event) {
-        this.file = event.target.files[0]
-        console.log(this.file)
-        let imageUrl = URL.createObjectURL(this.file);
-        const img = document.getElementById('profile-image');
-        img.setAttribute('src', imageUrl);
       },
+      methods: {
+        onFileSelected: function(event) {
+          this.file = event.target.files[0]
+          console.log(this.file)
+          let imageUrl = URL.createObjectURL(this.file);
+          const img = document.getElementById('profile-image');
+          img.setAttribute('src', imageUrl);
+        },
 
-      uploadFile: function() {
-        const stRef = storageRef(storage, `images/${this.userId}`)
-        uploadBytes(stRef, this.file).then((snapshot) => {
-          console.log('Załadowano plik');
-        });
-        this.file = null
+        uploadFile: function() {
+          const stRef = storageRef(storage, `images/${this.userId}`)
+          uploadBytes(stRef, this.file).then((snapshot) => {
+            console.log('Załadowano plik');
+          });
+          this.file = null
+        }
       }
-    }
     }
   </script>
 
