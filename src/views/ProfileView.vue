@@ -12,13 +12,13 @@
             
             </div>
             <div class="col-md-9 text-center">
-                <h1>{{ profileData.userName }}</h1>
+                <h1 class="word-wrap">{{ profileData.userName }}</h1>
           </div>
         </div>
         <div class="row justify-content-start text-left">
             <div v-if="profileData.city">
                 <p class="small text-muted mt-4 mb-1">Miasto</p>
-                <h2>{{ profileData.city }}</h2>
+                <h2 class="word-wrap">{{ profileData.city }}</h2>
             </div>
             <div v-if="profileData.description">
               <p class="small text-muted mt-4 mb-1">Opis</p>
@@ -27,7 +27,7 @@
             <div v-if="profileData.dogs.length > 0">
                 <p class="small text-muted mt-4 mb-1">Psy:</p>
                 <div v-for="dog in profileData.dogs">
-                <h5><img src="/src/assets/lapa_small.png">   <b>{{  dog.name }}</b>, {{ dog.race }}, {{ dog.age }} {{ dog.age <= 1 ? ' r.' : ' l.' }}</h5>
+                <h5><img src="/src/assets/lapa_small.png">   <b>{{  dog.name }}</b>, {{ dog.race }}, {{ dog.age }} {{ dog.age == 1 ? ' r.' : ' l.' }}</h5>
                 </div>
             </div>
             <div v-if="profileData.favourites.length > 0">

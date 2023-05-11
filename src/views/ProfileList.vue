@@ -7,9 +7,9 @@
                         <div class="d-flex flex-row">
                         <img :src="user.imageSrc" class="card-img-top user-avatar rounded-circle mb-3" alt="User avatar">
                         <div class="card-body">
-                            <h5 class="card-title">{{ user.name }}, {{ user.city }}</h5>
+                            <h5 class="card-title">{{ user.name }}<span v-if="user.city">, {{ user.city }}</span></h5>
                             <div v-for="dog in user.dogs" :key="dog.id">
-                            <p class="card-text"><strong>{{ dog.name }}</strong> {{ dog.race }}, {{ dog.age }}{{ dog.age <= 1 ? ' r.' : ' l.' }}</p>
+                            <p class="card-text"><strong>{{ dog.name }}</strong> {{ dog.race }}, {{ dog.age }}{{ dog.age == 1 ? ' r.' : ' l.' }}</p>
                             </div>
                         </div>
                         </div>
@@ -79,7 +79,7 @@
 
 <style>
     .user-avatar {
-        margin-top: 7px;
+        margin-top: 10px;
         margin-left: 15px; 
         width: 40px;
         height: 40px;
@@ -88,5 +88,10 @@
     }
     .card:hover {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+    @media (min-width: 576px) {
+    .card {
+        min-height: 100%;
+    }
     }
 </style>

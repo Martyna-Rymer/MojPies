@@ -10,6 +10,7 @@
             <h6>{{ formatDate(currentEvent.date) }}</h6>
             <p class="small text-muted mt-3 mb-1">Opis</p>
             <p>{{ currentEvent.description }}</p>
+            <p class="small text-muted mb-1">Miejsce spotkania</p>
         </div>
         <div class="d-flex justify-content-center mt-3">
             <div class="map-wrapper" v-if="currentEvent.geolocation">
