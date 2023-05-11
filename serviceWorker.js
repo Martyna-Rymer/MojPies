@@ -16,3 +16,19 @@ self.addEventListener("fetch", fetchEvent => {
     `${GHPATH}/src/assets/main.css`,
     `${GHPATH}/src/main.js`
   ]
+
+
+
+  self.addEventListener('install', event => {
+    function onInstall() {
+      return caches.open('static')
+        .then(cache => cache.addAll([
+          '/src/assets/',
+          '/src/main.js',
+          'public/'
+        ])
+        );
+    }
+  
+    event.waitUntil(onInstall(event));
+  });
