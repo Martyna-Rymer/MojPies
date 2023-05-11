@@ -17,7 +17,9 @@
     mounted () {
       const map = L.map("mapa", {
         dragging: false,
-        touchZoom: false
+        scrollWheelZoom: false,
+        touchZoom: false,
+
       })
       
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
