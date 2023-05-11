@@ -1,13 +1,13 @@
 <template>
     <div class="container" style="margin-bottom: 50px;">
         <div class="row">
-            <div class="col-md-3 mb-3" v-for="user in users" :key="user.id">
+            <div class="col-lg-4 mb-3" v-for="user in users" :key="user.id">
                 <router-link :to="{ name: 'profile', params: { userId: user.id } }">
                     <div class="card shadow rounded">
                         <div class="d-flex flex-row">
                         <img :src="user.imageSrc" class="card-img-top user-avatar rounded-circle mb-3" alt="User avatar">
                         <div class="card-body">
-                            <h5 class="card-title">{{ user.name }}<span v-if="user.city">, {{ user.city }}</span></h5>
+                            <h5 class="card-title word-wrap">{{ user.name }}<span v-if="user.city">, {{ user.city }}</span></h5>
                             <div v-for="dog in user.dogs" :key="dog.id">
                             <p class="card-text"><strong>{{ dog.name }}</strong> {{ dog.race }}, {{ dog.age }}{{ dog.age == 1 ? ' r.' : ' l.' }}</p>
                             </div>

@@ -3,19 +3,19 @@
       <div v-if="profileData">
           <ImagePicker />
           <form @submit.prevent="saveChanges">
-          <div class="form-group mt-3">
+          <div class="form-group mt-4">
               <label for="profileData.userName">Nazwa użytkownika *</label>
               <input type="text" class="form-control" id="name" v-model="profileData.name" required>
           </div>
-          <div class="form-group mt-3">
+          <div class="form-group mt-4">
               <label for="profileData.city">Miejscowość</label>
               <input type="text" class="form-control" id="city" v-model="profileData.city">
           </div>
-          <div class="form-group mt-3">
+          <div class="form-group mt-4">
               <label for="profileData.description">Opis</label>
               <textarea class="form-control" id="description" rows="3" v-model="profileData.description"></textarea>
           </div>
-          <div class="form-group mt-3">
+          <div class="form-group mt-4">
               <label for="profileData.favourite-places">Ulubione miejsca na wyjścia z psem</label>
 
               <div v-for="(loc, index) in profileData.favourites" :key="index">
@@ -30,23 +30,23 @@
               </div>
               <div><button type="button" class="btn btn-success mt-2" @click="addPlace">Dodaj miejsce</button></div>
           </div>
-          <div class="form-group mt-3">
+          <div class="form-group mt-4">
               <label for="dogs">Psy</label>
               <div v-for="(dog, index) in profileData.dogs" :key="index">
-              <div class="form-row">
-                  <div class="col">
-                  <input type="text" class="form-control" placeholder="Imię" v-model="dog.name">
-                  </div>
-                  <div class="col">
-                  <input type="text" class="form-control" placeholder="Rok urodzenia" v-model="dog.yearOfBirth">
-                  </div>
-                  <div class="col">
-                  <input type="text" class="form-control" placeholder="Rasa" v-model="dog.race">
-                  </div>
-                  <div class="col-auto">
-                  <button type="button" class="btn btn-danger" @click="removeDog(index)">Usuń</button>
-                  </div>
-              </div>
+                <div class="form-row mb-3">
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Imię" v-model="dog.name">
+                    </div>
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Rok urodzenia" v-model="dog.yearOfBirth">
+                    </div>
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Rasa" v-model="dog.race">
+                    </div>
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-danger" @click="removeDog(index)">Usuń</button>
+                    </div>
+                </div>
               </div>
               <div><button type="button" class="btn btn-success mt-2" @click="addDog">Dodaj psa</button></div>
           </div>
