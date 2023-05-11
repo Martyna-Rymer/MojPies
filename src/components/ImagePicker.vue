@@ -30,7 +30,7 @@
                     img.setAttribute('src', url);
                 })
                 .catch((error) => {
-                    img.setAttribute('src', '/public/profile.png');
+                    img.setAttribute('src', '/MojPies/profile.png');
                 });
             }
 
