@@ -55,7 +55,7 @@ export default {
       const year = date.getFullYear();
       const hour = date.getHours();
       const minutes = date.getMinutes();
-      return `${dayOfWeek}, ${dayOfMonth} ${month} ${year} ${hour}:${minutes.toString().padStart(2, "0")}`;
+      return `${dayOfWeek}, ${dayOfMonth} ${month} ${year} ${hour.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
     }
 
     return {formatDate, currentEvent}
