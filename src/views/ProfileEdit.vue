@@ -54,13 +54,13 @@
           </form>
       </div>
   </div>
-  <NavBarComponent />
+  <div v-if="isUserRegistered"><NavBarComponent /></div>
 </template>
 
 
 
 <script>
-import { db } from '@/firebase';
+import { auth, db } from "@/firebase";
 import { useRoute } from 'vue-router'
 import { ref as vueRef, onMounted, reactive, computed } from 'vue';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -74,6 +74,7 @@ export default{
   setup() {
     const userId = vueRef()
     const initialUrl = vueRef()
+    const isUserRegistered = vueRef()
     const profileData = reactive({
       id: null,
       name: '',
@@ -98,6 +99,23 @@ export default{
         profileData.description = docData.description
         profileData.favourites = docData.favourites || []
         profileData.dogs = docData.dogs || []
+
+
+
+        // Sprawdzamy, czy użytkownik o podanym uid istnieje w bazie danych Firebase.
+        // Jesli tak, menu dolne zostanie wyswietlone
+        getDoc(doc(db, "users", auth.currentUser.uid))
+          .then((doc) => {
+            if (doc.exists()) {
+              isUserRegistered.value = true
+            } else {
+              isUserRegistered.value = false
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      
     })
 
     const addDog = () => {
@@ -152,7 +170,8 @@ export default{
       addPlace,
       removePlace,
       saveChanges,
-      isFormValid
+      isFormValid,
+      isUserRegistered
     }
   }
 }

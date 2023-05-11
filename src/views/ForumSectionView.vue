@@ -5,7 +5,7 @@
       </div>
       <div v-if="currentSection">
         <h1 class="text-center">{{ currentSection.sectionName }}</h1>
-          <div class="col-9">
+          <div>
             <hr>
             <div v-if="threads">
               <div v-for="(thread, index) in threads" :key="index" class="card mb-1">
