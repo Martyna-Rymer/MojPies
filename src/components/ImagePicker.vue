@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <div class="text-center">
         <div class="text-center">
                 <img id="profile-image" class="card-img-top user-avatar rounded-circle mb-3">
@@ -63,10 +63,10 @@
     width: 220px; 
     height: 200px;
 }
-</style> -->
+</style>
 
 
-
+<!-- 
 <template>
   <div class="text-center">
     <div class="text-center">
@@ -130,4 +130,4 @@ export default {
 </style>
 
 
-
+ -->
