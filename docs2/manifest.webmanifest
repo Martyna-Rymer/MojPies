@@ -1,1 +1,0 @@
-{"name":"pwa","short_name":"pwa","start_url":"/PWA/","display":"standalone","background_color":"#ffffff","theme_color":"#83A6FF","lang":"en","scope":"/PWA/","icons":[{"src":"/PWA/assets/192x192-c05e3626.png","sizes":"192x192","type":"image/png"},{"src":"/PWA/assets/512x512-7c373e53.png","sizes":"192x192","type":"image/png"}],"purpose":"any"}
