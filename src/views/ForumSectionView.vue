@@ -1,6 +1,8 @@
 <template>
     <div class="container" style="margin-bottom: 50px;">
-      <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
+      <div class="text-center">
+        <img src="/src/assets/dogForum.png" alt="Dogs" class="forum-image">
+      </div>
       <div v-if="currentSection">
         <h1 class="text-center">{{ currentSection.sectionName }}</h1>
           <div class="col-9">
@@ -75,9 +77,8 @@
             threads.value = await Promise.all(threadSnap.docs.map(async (doc) => {
                 const data = doc.data();
                 const authorData = await getAuthorData(data.authorRef);
-
                 let imageSrc;
-                await getDownloadURL(storageRef(storage, `images/${route.params.userId}`))
+                await getDownloadURL(storageRef(storage, `images/${data.authorRef.id}`))
                 .then((url) => {
                     imageSrc = url
                 })
@@ -110,9 +111,10 @@
     width: 125%;
   }
   .forum-image {
-    max-width: 100%;
+    width: 100%;
   }
   .forum-sections {
+    width: 100%;
     margin-top: 20px;
   }
   .forum-sections h2 {
@@ -144,6 +146,16 @@
   .user-avatar {
       width: 20px; 
       height: 20px;
+  }
+
+  @media (min-width: 576px) {
+      .forum {
+        overflow: auto;
+        max-width: 600px;
+        }
+    .forum-image {
+        max-width: 600px;
+    }
   }
 </style>
 

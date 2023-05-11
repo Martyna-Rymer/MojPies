@@ -62,9 +62,6 @@
 <style scoped>
 .user-avatar {
     width: 220px; 
-    height: 210px;
+    height: 200px;
 }
-</style> 
-
-
-
+</style>

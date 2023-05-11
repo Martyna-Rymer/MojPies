@@ -20,8 +20,8 @@
 
 <script setup>
 
-import { ref, onMounted, computed } from 'vue';
-import { collection, doc, onSnapshot, getDocs, query, where } from 'firebase/firestore'
+import { ref, onMounted } from 'vue';
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/firebase';
 import NavBarComponent from '@/components/NavBarComponent.vue';
 
@@ -51,6 +51,7 @@ onMounted(async () => {
     }
     .forum {
     overflow: auto;
+    max-width: 100%;
     }
     .forum-image {
         max-width: 100%;
@@ -59,4 +60,13 @@ onMounted(async () => {
     .router-link-exact-active {
     color: black;
     }
+    @media (min-width: 576px) {
+      .forum {
+        overflow: auto;
+        max-width: 600px;
+        }
+    .forum-image {
+        max-width: 600px;
+    }
+  }
 </style>

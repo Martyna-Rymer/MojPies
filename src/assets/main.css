@@ -13,9 +13,15 @@ a {
   transition: 0.4s;
 }
 
+h1.word-wrap,
+h2.word-wrap,
 h5.word-wrap {
   word-wrap: break-word
 }
+
+/* h2.word-wrap {
+  word-wrap: break-word
+} */
 
 .leaflet-map-pane {
   transform: translate3d(0px);

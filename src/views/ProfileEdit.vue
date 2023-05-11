@@ -3,19 +3,19 @@
       <div v-if="profileData">
           <ImagePicker />
           <form @submit.prevent="saveChanges">
-          <div class="form-group">
-              <label for="profileData.userName">Nazwa użytkownika</label>
+          <div class="form-group mt-3">
+              <label for="profileData.userName">Nazwa użytkownika *</label>
               <input type="text" class="form-control" id="name" v-model="profileData.name" required>
           </div>
-          <div class="form-group">
+          <div class="form-group mt-3">
               <label for="profileData.city">Miejscowość</label>
               <input type="text" class="form-control" id="city" v-model="profileData.city">
           </div>
-          <div class="form-group">
+          <div class="form-group mt-3">
               <label for="profileData.description">Opis</label>
               <textarea class="form-control" id="description" rows="3" v-model="profileData.description"></textarea>
           </div>
-          <div class="form-group">
+          <div class="form-group mt-3">
               <label for="profileData.favourite-places">Ulubione miejsca na wyjścia z psem</label>
 
               <div v-for="(loc, index) in profileData.favourites" :key="index">
@@ -30,7 +30,7 @@
               </div>
               <div><button type="button" class="btn btn-success mt-2" @click="addPlace">Dodaj miejsce</button></div>
           </div>
-          <div class="form-group">
+          <div class="form-group mt-3">
               <label for="dogs">Psy</label>
               <div v-for="(dog, index) in profileData.dogs" :key="index">
               <div class="form-row">
@@ -50,7 +50,7 @@
               </div>
               <div><button type="button" class="btn btn-success mt-2" @click="addDog">Dodaj psa</button></div>
           </div>
-          <button type="submit" class="d-block mx-auto mt-3"><img src="/src/assets/save_h.png" width="150" @click="saveChanges"></button>
+          <button type="submit" :disabled="!isFormValid" class="d-block mx-auto mt-3"><img src="/src/assets/save_h.png" width="150" @click="saveChanges"></button>
           </form>
       </div>
   </div>
@@ -62,14 +62,14 @@
 <script>
 import { db } from '@/firebase';
 import { useRoute } from 'vue-router'
-import { ref as vueRef, onMounted, reactive } from 'vue';
+import { ref as vueRef, onMounted, reactive, computed } from 'vue';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import router from '../router';
 import NavBarComponent from '@/components/NavBarComponent.vue';
 import ImagePicker from '@/components/ImagePicker.vue';
 
 
-export default {
+export default{
   components: { NavBarComponent, ImagePicker },
   setup() {
     const userId = vueRef()
@@ -116,9 +116,13 @@ export default {
       profileData.favourites.splice(index, 1)
     }
   
+    const isFormValid = computed(() => {
+          return profileData.name != '';
+        });
 
     async function saveChanges() {
       const userDoc = doc(db, 'users', userId.value)
+      if (profileData.name != '') {
       try {
         await setDoc(userDoc, {
           name: profileData.name,
@@ -133,6 +137,10 @@ export default {
       } catch (error) {
         console.log('Error saving changes: ', error)
       }
+      }
+      else {
+        alert('Proszę wypełnić wymagane pola')
+      }
     }
 
     return {
@@ -144,6 +152,7 @@ export default {
       addPlace,
       removePlace,
       saveChanges,
+      isFormValid
     }
   }
 }
