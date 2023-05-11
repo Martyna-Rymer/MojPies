@@ -108,7 +108,7 @@
 
 <style>
   .card {
-    width: 125%;
+    width: 100%;
   }
   .forum-image {
     width: 100%;

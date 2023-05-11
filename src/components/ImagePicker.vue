@@ -4,7 +4,6 @@
                 <img id="profile-image" class="card-img-top user-avatar rounded-circle mb-3">
             </div>
         <input type="file" @change="onFileSelected">
-        <!-- <input type="file" accept="image/*" capture="camera" @change="onFileSelected"> -->
 
         <button v-if="file" @click="uploadFile">Zapisz zdjęcie</button>
     </div>
@@ -62,6 +61,6 @@
 <style scoped>
 .user-avatar {
     width: 220px; 
-    height: 200px;
+    height: 210px;
 }
 </style>
