@@ -26,16 +26,39 @@ export default defineConfig({
         workbox: {
           runtimeCaching: [
             {
-              urlPattern: ({ url }) => {
-                return url.pathname.includes("firebaseio");
-              },
-              handler: "CacheFirst",
-              options: {
-                cacheName: "api-cache",
-                cacheableResponse: {
-                  statuses: [0, 200],
+              
+                urlPattern: ({ url }) => url.origin.includes('firebaseio.com'),
+                handler: 'NetworkFirst',
+                options: {
+                  cacheName: 'firebase-cache',
+                  fetchOptions: {
+                    mode: 'no-cors',
+                  },
                 },
               },
+              {
+                urlPattern: ({ url }) => url.pathname.includes('api'),
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'api-cache',
+                  cacheableResponse: {
+                    statuses: [0, 200],
+                  },
+                },
+
+
+
+
+              // urlPattern: ({ url }) => {
+              //   return url.pathname.includes("firebaseio");
+              // },
+              // handler: "CacheFirst",
+              // options: {
+              //   cacheName: "api-cache",
+              //   cacheableResponse: {
+              //     statuses: [0, 200],
+              //   },
+              // },
             },
           ],
         },
