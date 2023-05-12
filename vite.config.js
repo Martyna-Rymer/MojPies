@@ -26,8 +26,7 @@ export default defineConfig({
         workbox: {
           runtimeCaching: [
             {
-              
-                urlPattern: ({ url }) => url.origin.includes('firebaseio.com'),
+                urlPattern: ({ url }) => url.authority.includes('firebaseio.com'),
                 handler: 'NetworkFirst',
                 options: {
                   cacheName: 'firebase-cache',
