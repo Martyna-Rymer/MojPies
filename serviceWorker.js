@@ -19,16 +19,16 @@ self.addEventListener("fetch", fetchEvent => {
 
 
 
-  self.addEventListener('install', event => {
-    function onInstall() {
-      return caches.open('static')
-        .then(cache => cache.addAll([
-          '/src/assets/',
-          '/src/main.js',
-          'public/'
-        ])
-        );
-    }
+  // self.addEventListener('install', event => {
+  //   function onInstall() {
+  //     return caches.open('static')
+  //       .then(cache => cache.addAll([
+  //         '/src/assets/',
+  //         '/src/main.js',
+  //         'public/'
+  //       ])
+  //       );
+  //   }
   
-    event.waitUntil(onInstall(event));
-  });
+  //   event.waitUntil(onInstall(event));
+  // });

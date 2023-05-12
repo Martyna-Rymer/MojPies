@@ -27,7 +27,7 @@ export default defineConfig({
           runtimeCaching: [
             {
               urlPattern: ({ url }) => {
-                return url.pathname.startsWith("/firestorage");
+                return url.pathname.includes("/api");
               },
               handler: "CacheFirst",
               options: {
