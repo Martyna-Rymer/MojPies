@@ -27,7 +27,7 @@ export default defineConfig({
           runtimeCaching: [
             {
               urlPattern: ({ url }) => {
-                return url.pathname.includes("api");
+                return url.pathname.includes("firebaseio");
               },
               handler: "CacheFirst",
               options: {
