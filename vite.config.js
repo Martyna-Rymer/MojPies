@@ -7,7 +7,42 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/MojPies/',
-  plugins: [vue(), VitePWA()],
+  plugins: [vue(), VitePWA(
+    {
+      manifest: {
+        icons: [
+          {
+            src: "./lapa_medium.png",
+            sizes: "192x192",
+            type: "image/png",},
+          {
+            src: "./lapa.png",
+            sizes: "192x192",
+            type: "image/png",},
+          ],
+            purpose: "any",
+          },
+       
+        workbox: {
+          runtimeCaching: [
+            {
+              urlPattern: ({ url }) => {
+                return url.pathname.startsWith("/firestorage");
+              },
+              handler: "CacheFirst",
+              options: {
+                cacheName: "api-cache",
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
+          ],
+        },
+      },
+        )
+        ],
+
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
